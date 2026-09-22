@@ -23,7 +23,8 @@ const {
   title,
   description,
   image,
-  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  // build.format "file" exposes ".html" in the pathname; canonicals never carry it.
+  canonicalURL = new URL(Astro.url.pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, ""), Astro.site).href,
   type = "website",
   noIndex = false,
   flushHero = false,

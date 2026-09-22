@@ -1,0 +1,62 @@
+---
+import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import ProductListing from "@/components/products/ProductListing.tsx";
+import Cta from "@/components/Cta.astro";
+import { getCategoryMeta, subcategories, type CategoryMeta, type SubcategoryMeta } from "@/lib/data/categories";
+import { getProductsBySubcategory } from "@/lib/data/products";
+import { absoluteUrl, createBreadcrumbSchema } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return subcategories.map((sub) => ({
+    params: { category: sub.category, subcategory: sub.slug },
+    props: { sub, category: getCategoryMeta(sub.category)! },
+  }));
+}
+
+interface Props { sub: SubcategoryMeta; category: CategoryMeta }
+const { sub, category } = Astro.props;
+const products = getProductsBySubcategory(sub.slug);
+const catPath = `/products/category/${category.slug}`;
+const path = `${catPath}/${sub.slug}`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: `${sub.label} products`,
+  description: sub.description,
+  url: absoluteUrl(path),
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: products.map((p, i) => ({ "@type": "ListItem", position: i + 1, name: p.name, url: absoluteUrl(`/products/${p.slug}`) })),
+  },
+};
+---
+
+<Base title={`${sub.label} in Las Vegas`} description={sub.description}>
+  <section class="section pt-6 md:pt-8">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: category.label, href: catPath },
+        { label: sub.label, href: path },
+      ]} />
+      <p class="eyebrow mt-8">{category.label}</p>
+      <h1 class="mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">{sub.label}</h1>
+      <p class="mt-5 max-w-[58ch] text-lg leading-relaxed text-body md:text-xl">{sub.description}</p>
+      <div class="mt-12">
+        <ProductListing client:idle products={products} />
+      </div>
+    </div>
+  </section>
+  <Cta />
+  <JsonLd data={schema} />
+  <JsonLd data={createBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: category.label, path: catPath },
+    { name: sub.label, path },
+  ])} />
+</Base>

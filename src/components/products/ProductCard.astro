@@ -1,0 +1,37 @@
+---
+import { cdnUrl } from "@/lib/image";
+import type { Product } from "@/lib/data/types";
+
+interface Props { product: Product }
+const { product } = Astro.props;
+const image = product.images[0];
+const topSpecs = product.specs.slice(0, 2);
+---
+
+<a
+  href={`/products/${product.slug}`}
+  class="group flex h-full flex-col rounded-xl bg-white shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]"
+>
+  <img
+    src={cdnUrl(image.src)}
+    alt={image.alt}
+    width={image.width}
+    height={image.height}
+    loading="lazy"
+    decoding="async"
+    class="aspect-[4/3] w-full rounded-t-xl object-cover"
+  />
+  <div class="flex flex-1 flex-col gap-2 p-4">
+    <span class="font-heading text-lg leading-tight font-bold uppercase tracking-wide text-ink">{product.name}</span>
+    {topSpecs.length > 0 && (
+      <dl class="flex flex-wrap gap-x-3 gap-y-1 text-sm text-body">
+        {topSpecs.map((s) => (
+          <div class="flex gap-1">
+            <dt class="text-body/70">{s.key}:</dt>
+            <dd>{s.value}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+  </div>
+</a>

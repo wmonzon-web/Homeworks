@@ -1,0 +1,23 @@
+---
+import SectionHeading from "@/components/SectionHeading.astro";
+import ServiceCard from "@/components/services/ServiceCard.astro";
+import { SERVICE_CATALOG } from "@/lib/data/services/catalog";
+import type { Service } from "@/lib/data/types";
+
+interface Props { service: Service }
+const { service } = Astro.props;
+
+// Same category first, then the next featured services, never the current one.
+const sameCategory = SERVICE_CATALOG.filter((s) => s.category === service.category && s.slug !== service.slug);
+const others = SERVICE_CATALOG.filter((s) => s.slug !== service.slug && !sameCategory.includes(s) && s.featured);
+const picks = [...sameCategory, ...others].slice(0, 3);
+---
+
+<section class="section band-cream" aria-labelledby="other-heading">
+  <div class="container mx-auto px-4">
+    <SectionHeading id="other-heading" eyebrow="Related" title="Other jobs we handle" />
+    <ul class="mt-10 grid gap-3 md:grid-cols-3">
+      {picks.map((s) => <li><ServiceCard service={s} /></li>)}
+    </ul>
+  </div>
+</section>

@@ -1,0 +1,21 @@
+---
+import ServiceIcon from "@/components/ServiceIcon.astro";
+import type { ServiceSummary } from "@/lib/data/types";
+
+interface Props { service: ServiceSummary; class?: string }
+const { service, class: className } = Astro.props;
+---
+
+<a
+  href={`/services/${service.slug}`}
+  class:list={[
+    "group flex h-full flex-col gap-3 rounded-xl bg-white p-5 shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]",
+    className,
+  ]}
+>
+  <span class="inline-flex size-10 items-center justify-center rounded-lg bg-cream text-ink">
+    <ServiceIcon name={service.icon} class="size-5" />
+  </span>
+  <span class="font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink">{service.name}</span>
+  <span class="text-sm leading-snug text-body">{service.summary}</span>
+</a>

@@ -1,0 +1,125 @@
+---
+import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import ProductCard from "@/components/products/ProductCard.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import Cta from "@/components/Cta.astro";
+import { BUSINESS } from "@/lib/business";
+import { getCategoryMeta, getSubcategoryMeta } from "@/lib/data/categories";
+import { getRelatedProducts, products } from "@/lib/data/products";
+import { getServiceSummary } from "@/lib/data/services/catalog";
+import type { Product } from "@/lib/data/types";
+import { absoluteImageUrl, cdnUrl } from "@/lib/image";
+import { absoluteUrl, createBreadcrumbSchema } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return products.map((product) => ({ params: { slug: product.slug }, props: { product } }));
+}
+
+interface Props { product: Product }
+const { product } = Astro.props;
+const category = getCategoryMeta(product.category)!;
+const sub = getSubcategoryMeta(product.subcategory)!;
+const installer = product.installServiceSlug ? getServiceSummary(product.installServiceSlug) : undefined;
+const related = getRelatedProducts(product, 3);
+const image = product.images[0];
+const catPath = `/products/category/${category.slug}`;
+const subPath = `${catPath}/${sub.slug}`;
+const isPlaceholder = product.brand === "Placeholder Brand";
+const description = `${product.name}: ${product.specs.slice(0, 3).map((s) => `${s.key} ${s.value}`).join(", ")}. Installed in Las Vegas by ${BUSINESS.name}.`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  description,
+  image: product.images.map((i) => absoluteImageUrl(i.src, BUSINESS.siteUrl)),
+  ...(product.brand && !isPlaceholder && { brand: { "@type": "Brand", name: product.brand } }),
+  category: `${category.label} > ${sub.label}`,
+  additionalProperty: product.specs.map((s) => ({ "@type": "PropertyValue", name: s.key, value: s.value })),
+  offers: {
+    "@type": "Offer",
+    url: absoluteUrl(`/get-quote?service=${product.installServiceSlug ?? ""}`),
+    availability: "https://schema.org/InStock",
+    priceSpecification: { "@type": "PriceSpecification", description: "Quoted installed" },
+    seller: { "@id": `${BUSINESS.siteUrl}/#business` },
+  },
+};
+---
+
+<Base title={product.name} description={description} image={image.src}>
+  <section class="section pt-6 md:pt-8">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: category.label, href: catPath },
+        { label: sub.label, href: subPath },
+        { label: product.name, href: `/products/${product.slug}` },
+      ]} />
+
+      <div class="mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+        <img
+          src={cdnUrl(image.src)}
+          alt={image.alt}
+          width={image.width}
+          height={image.height}
+          fetchpriority="high"
+          decoding="async"
+          class="aspect-[4/3] w-full rounded-2xl bg-cream object-cover"
+        />
+        <div>
+          <p class="eyebrow">{sub.label}</p>
+          <h1 class="mt-4 text-4xl leading-[0.98] md:text-5xl">{product.name}</h1>
+          {product.brand && !isPlaceholder && <p class="mt-3 text-[0.95rem] text-body">by {product.brand}</p>}
+          {isPlaceholder && (
+            <p class="mt-3 inline-block rounded-md bg-cream px-2.5 py-1 text-sm text-body">Placeholder listing. Real catalog coming.</p>
+          )}
+
+          <dl class="mt-8 divide-y divide-black/10 border-y border-black/10">
+            {product.specs.map((s) => (
+              <div class="grid grid-cols-[minmax(7rem,0.4fr)_1fr] gap-4 py-3 text-[0.95rem]">
+                <dt class="text-body">{s.key}</dt>
+                <dd class="text-ink">{s.value}</dd>
+              </div>
+            ))}
+          </dl>
+
+          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+            <a href={`/get-quote?service=${product.installServiceSlug ?? ""}&product=${product.slug}`} class="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]">
+              Quote this installed
+            </a>
+            {installer && (
+              <a href={`/services/${installer.slug}`} class="inline-flex h-12 items-center justify-center rounded-lg border border-ink/20 px-6 font-heading text-base font-bold uppercase tracking-wide text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-ink/5 focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]">
+                About {installer.shortName.toLowerCase()}
+              </a>
+            )}
+          </div>
+          <p class="mt-4 text-sm text-body">Pricing is quoted installed, with materials and labor on one line, so there's nothing to add up.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {related.length > 0 && (
+    <section class="section band-cream" aria-labelledby="related-heading">
+      <div class="container mx-auto px-4">
+        <SectionHeading id="related-heading" eyebrow="Related" title={`More ${category.label.toLowerCase()}`} />
+        <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {related.map((p) => <li><ProductCard product={p} /></li>)}
+        </ul>
+      </div>
+    </section>
+  )}
+
+  <Cta />
+  <JsonLd data={schema} />
+  <JsonLd data={createBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Products", path: "/products" },
+    { name: category.label, path: catPath },
+    { name: sub.label, path: subPath },
+    { name: product.name, path: `/products/${product.slug}` },
+  ])} />
+</Base>

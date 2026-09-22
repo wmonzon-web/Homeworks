@@ -1,0 +1,28 @@
+---
+/** Category / subcategory tile. Text-first; image optional so placeholders never break it. */
+import { ArrowRight } from "@lucide/astro";
+
+interface Props {
+  href: string;
+  label: string;
+  description: string;
+  count?: number;
+  countLabel?: string;
+}
+
+const { href, label, description, count, countLabel = "products" } = Astro.props;
+---
+
+<a
+  href={href}
+  class="group flex h-full flex-col justify-between gap-6 rounded-xl bg-white p-5 shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]"
+>
+  <div>
+    <span class="block font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink">{label}</span>
+    <span class="mt-2 block text-sm leading-snug text-body">{description}</span>
+  </div>
+  <span class="flex items-center justify-between text-sm text-body">
+    {typeof count === "number" ? <span class="tabular-nums">{count} {countLabel}</span> : <span />}
+    <ArrowRight class="size-4 transition-transform duration-150 ease-out group-hover:translate-x-0.5 group-hover:text-brand-red" aria-hidden="true" />
+  </span>
+</a>

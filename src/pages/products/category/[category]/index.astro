@@ -1,0 +1,59 @@
+---
+import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import LinkCard from "@/components/products/LinkCard.astro";
+import Cta from "@/components/Cta.astro";
+import { categories, getSubcategoriesForCategory, type CategoryMeta } from "@/lib/data/categories";
+import { getProductsBySubcategory } from "@/lib/data/products";
+import { getServiceSummary } from "@/lib/data/services/catalog";
+import { absoluteUrl, createBreadcrumbSchema } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return categories.map((category) => ({ params: { category: category.slug }, props: { category } }));
+}
+
+interface Props { category: CategoryMeta }
+const { category } = Astro.props;
+const subs = getSubcategoriesForCategory(category.slug);
+const installer = getServiceSummary(category.installServiceSlug);
+const path = `/products/category/${category.slug}`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: category.label,
+  description: category.description,
+  url: absoluteUrl(path),
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: subs.map((s, i) => ({ "@type": "ListItem", position: i + 1, name: s.label, url: absoluteUrl(`${path}/${s.slug}`) })),
+  },
+};
+---
+
+<Base title={`${category.label} products in Las Vegas`} description={category.description}>
+  <section class="section pt-6 md:pt-8">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products", href: "/products" }, { label: category.label, href: path }]} />
+      <p class="eyebrow mt-8">Products</p>
+      <h1 class="mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">{category.label}</h1>
+      <p class="mt-5 max-w-[58ch] text-lg leading-relaxed text-body md:text-xl">{category.description}</p>
+      {installer && (
+        <p class="mt-4 text-[0.95rem] text-body">
+          Installed by our <a href={`/services/${installer.slug}`} class="font-medium text-ink underline decoration-ink/25 underline-offset-4 hover:decoration-brand-red">{installer.name.toLowerCase()}</a> service.
+        </p>
+      )}
+      <ul class="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {subs.map((s) => (
+          <li>
+            <LinkCard href={`${path}/${s.slug}`} label={s.label} description={s.description} count={getProductsBySubcategory(s.slug).length} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Cta />
+  <JsonLd data={schema} />
+  <JsonLd data={createBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Products", path: "/products" }, { name: category.label, path }])} />
+</Base>

@@ -1,0 +1,32 @@
+---
+import { ChevronRight } from "@lucide/astro";
+
+interface Props {
+  items: Array<{ label: string; href: string }>;
+  /** On ink surfaces. */
+  tone?: "light" | "dark";
+  class?: string;
+}
+
+const { items, tone = "light", class: className } = Astro.props;
+const muted = tone === "dark" ? "text-white/60 hover:text-white" : "text-body hover:text-ink";
+const current = tone === "dark" ? "text-white" : "text-ink";
+---
+
+<nav aria-label="Breadcrumb" class:list={["text-sm", className]}>
+  <ol class="flex flex-wrap items-center gap-1.5">
+    {items.map((item, i) => {
+      const last = i === items.length - 1;
+      return (
+        <li class="flex items-center gap-1.5">
+          {last ? (
+            <span class:list={["font-medium", current]} aria-current="page">{item.label}</span>
+          ) : (
+            <a href={item.href} class:list={["transition-colors", muted]}>{item.label}</a>
+          )}
+          {!last && <ChevronRight class="size-3.5 opacity-50" aria-hidden="true" />}
+        </li>
+      );
+    })}
+  </ol>
+</nav>

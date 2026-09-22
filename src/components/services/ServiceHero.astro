@@ -1,0 +1,37 @@
+---
+import { Phone } from "@lucide/astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import { BUSINESS } from "@/lib/business";
+import { SERVICE_CATEGORY_LABELS } from "@/lib/data/services/catalog";
+import type { Service } from "@/lib/data/types";
+
+interface Props { service: Service }
+const { service } = Astro.props;
+---
+
+<section class="dark band-ink" aria-labelledby="service-heading">
+  <div class="container mx-auto px-4 pt-24 pb-14 md:pt-36 md:pb-20">
+    <Breadcrumbs
+      tone="dark"
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Services", href: "/services" },
+        { label: service.shortName, href: `/services/${service.slug}` },
+      ]}
+    />
+    <p class="eyebrow mt-8">{SERVICE_CATEGORY_LABELS[service.category]}</p>
+    <h1 id="service-heading" class="mt-4 max-w-4xl text-5xl leading-[0.95] tracking-wide text-white md:text-6xl">
+      {service.name}
+    </h1>
+    <p class="mt-5 max-w-[52ch] text-lg leading-relaxed text-white/75 md:text-xl">{service.tagline}</p>
+    <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+      <a href={`/get-quote?service=${service.slug}`} class="inline-flex h-12 items-center justify-center rounded-lg bg-white px-6 font-heading text-base font-bold uppercase tracking-wide text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-cream focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
+        Get a quote
+      </a>
+      <a href={`tel:${BUSINESS.phone.e164}`} class="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/25 px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-white/10 focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
+        <Phone class="size-4" aria-hidden="true" />
+        {BUSINESS.phone.display}
+      </a>
+    </div>
+  </div>
+</section>

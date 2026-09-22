@@ -1,0 +1,59 @@
+---
+import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import ServiceHero from "@/components/services/ServiceHero.astro";
+import QuickFacts from "@/components/services/QuickFacts.astro";
+import ServiceContent from "@/components/services/ServiceContent.astro";
+import ServiceBenefits from "@/components/services/ServiceBenefits.astro";
+import NumberedSteps from "@/components/NumberedSteps.astro";
+import Faq from "@/components/Faq.astro";
+import OtherServices from "@/components/services/OtherServices.astro";
+import Cta from "@/components/Cta.astro";
+import { BUSINESS } from "@/lib/business";
+import { SERVICES } from "@/lib/data/services";
+import type { Service } from "@/lib/data/types";
+import { absoluteUrl, createBreadcrumbSchema, createFaqSchema } from "@/lib/seo";
+
+export function getStaticPaths() {
+  return SERVICES.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+interface Props { service: Service }
+const { service } = Astro.props;
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  name: service.name,
+  serviceType: service.name,
+  description: service.meta.description ?? service.summary,
+  url: absoluteUrl(`/services/${service.slug}`),
+  provider: { "@id": `${BUSINESS.siteUrl}/#business` },
+  areaServed: BUSINESS.serviceAreas.map((a) => ({ "@type": "City", name: `${a.city}, ${a.state}` })),
+  offers: { "@type": "Offer", url: absoluteUrl(`/get-quote?service=${service.slug}`), availability: "https://schema.org/InStock" },
+};
+---
+
+<Base
+  title={service.meta.title ?? service.name}
+  description={service.meta.description ?? service.summary}
+  image={service.meta.ogImage}
+  flushHero
+>
+  <ServiceHero service={service} />
+  {service.quickFacts && <QuickFacts facts={service.quickFacts} />}
+  <ServiceContent sections={service.contentSections} />
+  <ServiceBenefits service={service} />
+  <NumberedSteps title={`How a ${service.shortName.toLowerCase()} job goes`} steps={service.process} />
+  <Faq id="service-faq" title={`${service.shortName} questions`} lead="Answered the way we'd answer them on the phone." faqs={service.faqs} />
+  <OtherServices service={service} />
+  <Cta title={`Ready to book ${service.shortName.toLowerCase()}?`} lead="Send a few photos and we'll come back with a number, usually the same day." />
+
+  <JsonLd data={serviceSchema} />
+  <JsonLd data={createFaqSchema(service.faqs)} />
+  <JsonLd data={createBreadcrumbSchema([
+    { name: "Home", path: "/" },
+    { name: "Services", path: "/services" },
+    { name: service.shortName, path: `/services/${service.slug}` },
+  ])} />
+</Base>

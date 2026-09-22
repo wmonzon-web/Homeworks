@@ -1,0 +1,21 @@
+---
+import SectionHeading from "@/components/SectionHeading.astro";
+import type { Service } from "@/lib/data/types";
+
+interface Props { service: Service }
+const { service } = Astro.props;
+---
+
+<section class="section bg-white" aria-labelledby="benefits-heading">
+  <div class="container mx-auto px-4">
+    <SectionHeading id="benefits-heading" eyebrow="What you get" title={`Why homeowners book us for ${service.shortName.toLowerCase()}`} />
+    <dl class="mt-10 grid gap-x-8 gap-y-8 md:grid-cols-3">
+      {service.benefits.map((b) => (
+        <div class="border-t border-black/10 pt-5">
+          <dt class="font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink">{b.title}</dt>
+          <dd class="mt-2 text-[0.95rem] leading-relaxed text-body">{b.description}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

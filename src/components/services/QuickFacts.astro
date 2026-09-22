@@ -1,0 +1,24 @@
+---
+import type { ServiceQuickFacts } from "@/lib/data/types";
+
+interface Props { facts: ServiceQuickFacts }
+const { facts } = Astro.props;
+const rows = [
+  { label: "How long it takes", value: facts.typicalDuration },
+  { label: "How it's priced", value: facts.priceBand },
+  { label: "When to call", value: facts.whenToCall },
+];
+---
+
+<section class="band-cream" aria-label="Quick facts">
+  <div class="container mx-auto px-4 py-8 md:py-10">
+    <dl class="grid gap-6 md:grid-cols-3 md:gap-8">
+      {rows.map((r) => (
+        <div class="border-t border-black/10 pt-4">
+          <dt class="font-heading text-sm font-bold uppercase tracking-[0.18em] text-brand-red">{r.label}</dt>
+          <dd class="mt-2 text-[0.95rem] leading-relaxed text-ink">{r.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

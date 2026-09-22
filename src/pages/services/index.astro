@@ -1,0 +1,57 @@
+---
+import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import ServiceCard from "@/components/services/ServiceCard.astro";
+import Cta from "@/components/Cta.astro";
+import { BUSINESS } from "@/lib/business";
+import { SERVICE_CATALOG, getServicesByCategory } from "@/lib/data/services/catalog";
+import { absoluteUrl, createBreadcrumbSchema } from "@/lib/seo";
+
+const groups = getServicesByCategory();
+const title = "Home repair & renovation services in Las Vegas";
+const description = `${SERVICE_CATALOG.length} services for Las Vegas homeowners: drywall, painting, flooring, tile, plumbing, electrical, doors, kitchens, baths, and handyman repairs. One licensed crew, flat-price quotes.`;
+
+const listSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: `${BUSINESS.name} services`,
+  itemListElement: SERVICE_CATALOG.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: s.name,
+    url: absoluteUrl(`/services/${s.slug}`),
+  })),
+};
+---
+
+<Base title={title} description={description}>
+  <section class="section pt-6 md:pt-8">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }]} />
+      <p class="eyebrow mt-8">Services</p>
+      <h1 class="mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">Everything your house needs, from one crew</h1>
+      <p class="mt-5 max-w-[58ch] text-lg leading-relaxed text-body md:text-xl">
+        Repairs are quoted flat from your photos and scheduled within the week.
+        Renovations get a written scope and a start date. Pick the job below,
+        or <a href="/get-quote" class="font-medium text-ink underline decoration-ink/25 underline-offset-4 hover:decoration-brand-red">start a quote</a> and describe it in your own words.
+      </p>
+    </div>
+  </section>
+
+  {groups.map((group, gi) => (
+    <section class:list={["section pt-0", gi % 2 === 1 ? "band-cream pt-16 md:pt-24" : ""]} aria-labelledby={`group-${group.category}`}>
+      <div class="container mx-auto px-4">
+        <h2 id={`group-${group.category}`} class="border-t border-black/10 pt-6 text-3xl leading-[1.05] md:text-4xl">{group.label}</h2>
+        <ul class="mt-8 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {group.services.map((s) => <li><ServiceCard service={s} /></li>)}
+        </ul>
+      </div>
+    </section>
+  ))}
+
+  <Cta title="Don't see your job listed?" lead="If it's inside a house and it's broken, worn, or overdue for an update, send it our way and we'll tell you straight whether it's something we do." />
+
+  <JsonLd data={listSchema} />
+  <JsonLd data={createBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Services", path: "/services" }])} />
+</Base>

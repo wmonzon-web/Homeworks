@@ -1,0 +1,56 @@
+---
+import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import LinkCard from "@/components/products/LinkCard.astro";
+import Cta from "@/components/Cta.astro";
+import { BUSINESS } from "@/lib/business";
+import { categories } from "@/lib/data/categories";
+import { getProductsByCategory } from "@/lib/data/products";
+import { absoluteUrl, createBreadcrumbSchema } from "@/lib/seo";
+
+const sorted = [...categories].sort((a, b) => a.order - b.order);
+const title = "Materials and fixtures we install";
+const description = `Flooring, paint, plumbing fixtures, lighting, doors, trim, kitchen and bath materials ${BUSINESS.name} installs in Las Vegas homes. Browse, then let us quote the install.`;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: title,
+  url: absoluteUrl("/products"),
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: sorted.map((c, i) => ({ "@type": "ListItem", position: i + 1, name: c.label, url: absoluteUrl(`/products/category/${c.slug}`) })),
+  },
+};
+---
+
+<Base title={title} description={description}>
+  <section class="section pt-6 md:pt-8">
+    <div class="container mx-auto px-4">
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Products", href: "/products" }]} />
+      <p class="eyebrow mt-8">Products</p>
+      <h1 class="mt-4 max-w-4xl text-5xl leading-[0.95] md:text-6xl">Materials we install and stand behind</h1>
+      <p class="mt-5 max-w-[58ch] text-lg leading-relaxed text-body md:text-xl">
+        These are the products we reach for most, because they hold up in Las
+        Vegas homes and we know how to install them right. Pick something here
+        and the quote covers the material and the labor.
+      </p>
+      <ul class="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {sorted.map((c) => (
+          <li>
+            <LinkCard
+              href={`/products/category/${c.slug}`}
+              label={c.label}
+              description={c.description}
+              count={getProductsByCategory(c.slug).length}
+            />
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Cta title="Want something you don't see here?" lead="We can source most brands and lines. Tell us what you have in mind and we'll price it installed." />
+  <JsonLd data={schema} />
+  <JsonLd data={createBreadcrumbSchema([{ name: "Home", path: "/" }, { name: "Products", path: "/products" }])} />
+</Base>

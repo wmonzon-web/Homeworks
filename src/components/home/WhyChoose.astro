@@ -1,0 +1,44 @@
+---
+import SectionHeading from "@/components/SectionHeading.astro";
+import { BUSINESS } from "@/lib/business";
+
+const commitments = [
+  {
+    title: "Flat prices before we start",
+    body: "Repairs are quoted from your photos whenever possible. The number you approve is the number you pay.",
+  },
+  {
+    title: "One crew for every trade",
+    body: "Drywall, paint, floors, plumbing, and electrical under one license, so nothing waits on another contractor.",
+  },
+  {
+    title: "Scheduled this week",
+    body: "Same-week appointments for repairs. Start dates for renovations are written into the quote.",
+  },
+  {
+    title: "Backed by Xtreme Build Group",
+    body: `${BUSINESS.name} is the everyday-home arm of ${BUSINESS.parentCompany.name}. Same standards, priced for the house you already own.`,
+  },
+];
+---
+
+<section class="section bg-white" aria-labelledby="why-heading">
+  <div class="container mx-auto px-4">
+    <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <SectionHeading
+        id="why-heading"
+        eyebrow="Why Homeworks"
+        title="Built for the house you're keeping"
+        lead="Not a flip, not a showpiece. A home in the middle of the market that you want maintained well and improved on your terms, by people who show up."
+      />
+      <dl class="grid gap-x-8 gap-y-8 sm:grid-cols-2">
+        {commitments.map((c) => (
+          <div class="border-t border-black/10 pt-5">
+            <dt class="font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink">{c.title}</dt>
+            <dd class="mt-2 text-[0.95rem] leading-relaxed text-body">{c.body}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+</section>

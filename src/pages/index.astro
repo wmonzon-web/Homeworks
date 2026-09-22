@@ -1,13 +1,33 @@
 ---
 import Base from "@/layouts/Base.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
 import Hero from "@/components/home/Hero.astro";
+import ServicesGrid from "@/components/home/ServicesGrid.astro";
+import Process from "@/components/home/Process.astro";
+import WhyChoose from "@/components/home/WhyChoose.astro";
+import ProductsTeaser from "@/components/home/ProductsTeaser.astro";
+import Faq from "@/components/Faq.astro";
+import Cta from "@/components/Cta.astro";
 import { BUSINESS } from "@/lib/business";
+import { HOME_FAQS } from "@/lib/data/faqs";
+import { createFaqSchema } from "@/lib/seo";
 ---
 
 <Base
   title="Home repairs & renovations in Las Vegas"
-  description={`${BUSINESS.name} handles drywall, paint, flooring, plumbing, electrical, and handyman work for Las Vegas homeowners. Request a quote in under a minute.`}
+  description={`${BUSINESS.name} handles drywall, paint, flooring, plumbing, electrical, and handyman work for Las Vegas homeowners. Flat-price quotes, one licensed crew, scheduled this week.`}
   flushHero
 >
   <Hero />
+  <ServicesGrid />
+  <Process />
+  <WhyChoose />
+  <ProductsTeaser />
+  <Faq
+    title="Straight answers before you call"
+    lead="The questions homeowners ask us first."
+    faqs={HOME_FAQS}
+  />
+  <Cta />
+  <JsonLd data={createFaqSchema(HOME_FAQS)} />
 </Base>

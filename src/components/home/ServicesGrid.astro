@@ -1,0 +1,42 @@
+---
+import { ArrowRight } from "@lucide/astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ServiceIcon from "@/components/ServiceIcon.astro";
+import { getFeaturedServices, SERVICE_CATALOG } from "@/lib/data/services/catalog";
+
+const featured = getFeaturedServices(8);
+---
+
+<section class="section bg-white" aria-labelledby="services-heading">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <SectionHeading
+        id="services-heading"
+        eyebrow="Services"
+        title="What we fix, build, and refresh"
+        lead="Eight jobs we get called for most. Each one links to a quote pre-filled with that service."
+      />
+      <a href="/services" class="inline-flex shrink-0 items-center gap-1.5 text-[0.95rem] font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-brand-red">
+        All {SERVICE_CATALOG.length} services
+        <ArrowRight class="size-4" aria-hidden="true" />
+      </a>
+    </div>
+
+    <ul class="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4" aria-label="Popular services">
+      {featured.map((s) => (
+        <li>
+          <a
+            href={`/services/${s.slug}`}
+            class="group flex h-full flex-col gap-3 rounded-xl bg-white p-5 shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]"
+          >
+            <span class="inline-flex size-10 items-center justify-center rounded-lg bg-cream text-ink">
+              <ServiceIcon name={s.icon} class="size-5" />
+            </span>
+            <span class="font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink">{s.shortName}</span>
+            <span class="text-sm leading-snug text-body">{s.summary}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

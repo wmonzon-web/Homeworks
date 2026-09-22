@@ -1,0 +1,35 @@
+---
+/** Native disclosure FAQ: no JS, and the answers stay in the DOM for crawlers. */
+import { ChevronDown } from "@lucide/astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  faqs: Array<{ question: string; answer: string }>;
+  id?: string;
+  class?: string;
+}
+
+const { eyebrow = "Questions", title, lead, faqs, id = "faq-heading", class: className } = Astro.props;
+---
+
+<section class:list={["section", className ?? "bg-white"]} aria-labelledby={id}>
+  <div class="container mx-auto px-4">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <SectionHeading id={id} eyebrow={eyebrow} title={title} lead={lead} />
+      <div class="divide-y divide-black/10 border-y border-black/10">
+        {faqs.map((faq) => (
+          <details class="group">
+            <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-5 text-left font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink [&::-webkit-details-marker]:hidden focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none">
+              {faq.question}
+              <ChevronDown class="size-5 shrink-0 text-body transition-transform duration-150 ease-out group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <p class="max-w-[65ch] pb-6 text-[0.95rem] leading-relaxed text-body">{faq.answer}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

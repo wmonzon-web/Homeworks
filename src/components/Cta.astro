@@ -1,0 +1,34 @@
+---
+import { Phone } from "@lucide/astro";
+import { BUSINESS } from "@/lib/business";
+
+interface Props {
+  title?: string;
+  lead?: string;
+}
+
+const {
+  title = "Ready when you are.",
+  lead = "Tell us the job in about a minute, or call and talk to a person who can actually schedule it.",
+} = Astro.props;
+---
+
+<section class="dark band-ink section" aria-labelledby="cta-heading">
+  <div class="container mx-auto px-4">
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+      <div class="max-w-2xl">
+        <h2 id="cta-heading" class="text-4xl leading-[1.02] text-white md:text-5xl">{title}</h2>
+        <p class="mt-4 max-w-[52ch] text-lg leading-relaxed text-white/75">{lead}</p>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row">
+        <a href="/get-quote" class="inline-flex h-12 items-center justify-center rounded-lg bg-white px-6 font-heading text-base font-bold uppercase tracking-wide text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-cream focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
+          Get a quote
+        </a>
+        <a href={`tel:${BUSINESS.phone.e164}`} class="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/25 px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-white/10 focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
+          <Phone class="size-4" aria-hidden="true" />
+          {BUSINESS.phone.display}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

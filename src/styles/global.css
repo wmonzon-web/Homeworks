@@ -1,0 +1,181 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource/saira-condensed/700.css";
+@import "@fontsource-variable/roboto";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: "Roboto Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Saira Condensed", "Roboto Variable", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Brand tokens (Xtreme Build Group palette, Homeworks usage) */
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-brand-red: var(--brand-red);
+  --color-brand-red-deep: var(--brand-red-deep);
+  --color-body: var(--body);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root {
+  /* Source palette */
+  --ink: oklch(0.17 0.012 255);          /* #0C1015 near-black */
+  --ink-soft: oklch(0.24 0.012 255);     /* hover/lift on ink surfaces */
+  --cream: oklch(0.965 0.016 75);        /* #FBF3EA warm cream band */
+  --cream-deep: oklch(0.93 0.02 75);     /* borders/dividers on cream */
+  --brand-red: oklch(0.6 0.23 28);       /* #E82820 accent, sparingly */
+  --brand-red-deep: oklch(0.52 0.21 28);
+  --body: oklch(0.4 0.007 260);          /* #494B4F body text */
+
+  /* shadcn semantic tokens */
+  --background: oklch(1 0 0);
+  --foreground: var(--ink);
+  --card: oklch(1 0 0);
+  --card-foreground: var(--ink);
+  --popover: oklch(1 0 0);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: var(--cream);
+  --secondary-foreground: var(--ink);
+  --muted: oklch(0.97 0.006 75);
+  --muted-foreground: var(--body);
+  --accent: oklch(0.955 0.012 75);
+  --accent-foreground: var(--ink);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.9 0.008 75);
+  --input: oklch(0.9 0.008 75);
+  --ring: var(--ink);
+  --chart-1: var(--ink);
+  --chart-2: var(--brand-red);
+  --chart-3: var(--body);
+  --chart-4: var(--cream-deep);
+  --chart-5: var(--cream);
+  --radius: 0.75rem;
+  --sidebar: var(--cream);
+  --sidebar-foreground: var(--ink);
+  --sidebar-primary: var(--ink);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.955 0.012 75);
+  --sidebar-accent-foreground: var(--ink);
+  --sidebar-border: var(--cream-deep);
+  --sidebar-ring: var(--ink);
+}
+
+/* The site is light-only. `.dark` is kept for shadcn component compatibility and
+   is used on ink-colored bands (hero, footer, CTA) so form controls invert correctly. */
+.dark {
+  --background: var(--ink);
+  --foreground: oklch(1 0 0);
+  --card: var(--ink-soft);
+  --card-foreground: oklch(1 0 0);
+  --popover: var(--ink-soft);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(1 0 0);
+  --primary-foreground: var(--ink);
+  --secondary: var(--ink-soft);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: var(--ink-soft);
+  --muted-foreground: oklch(0.78 0.006 75);
+  --accent: var(--ink-soft);
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(1 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans scroll-smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply bg-background text-body;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading text-foreground;
+    font-synthesis: none;
+    text-wrap: balance;
+  }
+  h1 {
+    @apply uppercase tracking-wide;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer utilities {
+  .container {
+    max-width: 1280px;
+  }
+  .section {
+    @apply py-16 md:py-24;
+  }
+  .band-cream {
+    @apply bg-cream;
+  }
+  /* Add class="dark" alongside .band-ink so shadcn controls invert on ink surfaces. */
+  .band-ink {
+    @apply bg-ink text-white;
+  }
+  .eyebrow {
+    @apply font-heading text-sm font-bold uppercase tracking-[0.18em] text-brand-red;
+  }
+}

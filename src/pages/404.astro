@@ -1,0 +1,27 @@
+---
+import Base from "@/layouts/Base.astro";
+import { BUSINESS } from "@/lib/business";
+import { Button } from "@/components/ui/button";
+---
+
+<Base
+  title="Page not found"
+  description="That page doesn't exist. Head back to the homepage or request a quote."
+  noIndex
+  skipGlobalSchema
+>
+  <section class="section">
+    <div class="container mx-auto flex flex-col items-start gap-6 px-4">
+      <p class="eyebrow">404</p>
+      <h1 class="text-5xl md:text-6xl">We couldn't find that page</h1>
+      <p class="max-w-[60ch] text-lg">
+        The link may be outdated or mistyped. Browse our services, request a
+        quote, or call {BUSINESS.phone.display} and we'll point you the right way.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <Button asChild size="lg"><a href="/">Back to home</a></Button>
+        <Button asChild size="lg" variant="outline"><a href="/services">Browse services</a></Button>
+      </div>
+    </div>
+  </section>
+</Base>

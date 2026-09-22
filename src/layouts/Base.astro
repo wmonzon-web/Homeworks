@@ -1,0 +1,82 @@
+---
+import "@/styles/global.css";
+import { createLocalBusinessSchema, createWebsiteSchema } from "@/lib/seo";
+import SEO from "@/components/seo/SEO.astro";
+import JsonLd from "@/components/seo/JsonLd.astro";
+import Header from "@/components/layout/Header.astro";
+import Footer from "@/components/layout/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  canonicalURL?: string;
+  type?: "website" | "article";
+  noIndex?: boolean;
+  /** Set when the page's first section sits under the fixed header (hero pages). */
+  flushHero?: boolean;
+  /** Skip the global LocalBusiness/WebSite schema (e.g. utility pages). */
+  skipGlobalSchema?: boolean;
+}
+
+const {
+  title,
+  description,
+  image,
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
+  type = "website",
+  noIndex = false,
+  flushHero = false,
+  skipGlobalSchema = false,
+} = Astro.props;
+
+const cloudflareAnalyticsToken = (
+  import.meta.env.PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN as string | undefined
+)?.trim();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0C1015" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      canonicalURL={canonicalURL}
+      type={type}
+      noIndex={noIndex}
+    />
+    {!skipGlobalSchema && <JsonLd data={createWebsiteSchema()} />}
+    {!skipGlobalSchema && <JsonLd data={createLocalBusinessSchema()} />}
+    <slot name="head" />
+  </head>
+  <body class="min-h-dvh flex flex-col">
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-full focus:bg-ink focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
+    >
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" class:list={["flex-1", flushHero ? "" : "pt-16 md:pt-24"]}>
+      <slot />
+    </main>
+    <Footer />
+    <slot name="body-end" />
+    {
+      import.meta.env.PROD && cloudflareAnalyticsToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cloudflareAnalyticsToken })}
+        />
+      )
+    }
+  </body>
+</html>

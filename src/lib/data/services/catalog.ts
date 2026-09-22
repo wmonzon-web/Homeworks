@@ -11,6 +11,17 @@ export const SERVICE_CATEGORY_LABELS: Record<ServiceCategory, string> = {
   exterior: "Exterior & weatherproofing",
 };
 
+export const SERVICE_CATEGORY_DESCRIPTIONS: Record<ServiceCategory, string> = {
+  handyman: "The list on the fridge, handled in one visit.",
+  "drywall-paint": "Walls and ceilings patched, textured, and painted by the same crew.",
+  "flooring-tile": "New floors and tile on properly prepped, flat, dry substrates.",
+  plumbing: "Fixture repairs and swaps, done to code, without the rooter-company runaround.",
+  electrical: "Outlets, switches, lights, and fans installed safely on rated boxes.",
+  "carpentry-doors": "Trim, doors, and windows that close, latch, and line up.",
+  remodeling: "Kitchens and baths refreshed without moving walls or living in a job site for months.",
+  exterior: "The sealing, patching, and upkeep that a desert house needs every few years.",
+};
+
 export const SERVICE_CATEGORY_ORDER: ServiceCategory[] = [
   "handyman",
   "drywall-paint",

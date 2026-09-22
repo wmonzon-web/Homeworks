@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { BUSINESS } from "@/lib/business";
-import { cn } from "@/lib/utils";
+import { FIELD_CLASS, LABEL_CLASS, TEXTAREA_CLASS } from "@/lib/ui";
 
-const field =
-  "h-12 w-full rounded-lg border border-input bg-white px-3.5 text-base text-ink placeholder:text-body/60 transition-[border-color,box-shadow] duration-150 focus-visible:border-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ink/15 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/15";
+const field = FIELD_CLASS;
 
 type Values = { name: string; email: string; phone: string; message: string };
 
@@ -79,27 +78,27 @@ export default function ContactForm() {
     <form onSubmit={submit} noValidate className="flex flex-col gap-4">
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="c-name" className="text-sm font-medium text-ink">Name</label>
+          <label htmlFor="c-name" className={LABEL_CLASS}>Name</label>
           {input("name", { autoComplete: "name" })}
           {errors.name && <p id="c-name-error" className="text-sm text-destructive">{errors.name}</p>}
         </div>
         <div className="flex flex-col gap-1.5">
-          <label htmlFor="c-phone" className="text-sm font-medium text-ink">Phone</label>
+          <label htmlFor="c-phone" className={LABEL_CLASS}>Phone</label>
           {input("phone", { type: "tel", autoComplete: "tel" })}
           {errors.phone && <p id="c-phone-error" className="text-sm text-destructive">{errors.phone}</p>}
         </div>
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="c-email" className="text-sm font-medium text-ink">Email</label>
+        <label htmlFor="c-email" className={LABEL_CLASS}>Email</label>
         {input("email", { type: "email", autoComplete: "email" })}
         {errors.email && <p id="c-email-error" className="text-sm text-destructive">{errors.email}</p>}
       </div>
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="c-message" className="text-sm font-medium text-ink">How can we help?</label>
+        <label htmlFor="c-message" className={LABEL_CLASS}>How can we help?</label>
         <textarea
           id="c-message"
           rows={5}
-          className={cn(field, "h-auto py-3")}
+          className={TEXTAREA_CLASS}
           value={values.message}
           onChange={(e) => set("message", e.target.value)}
           onBlur={() => blur("message")}

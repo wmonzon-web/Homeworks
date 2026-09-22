@@ -8,6 +8,7 @@ import { BUSINESS } from "@/lib/business";
 import { SERVICE_CATALOG, SERVICE_CATEGORY_LABELS, SERVICE_CATEGORY_ORDER } from "@/lib/data/services/catalog";
 import { BUDGET_OPTIONS, OWNERSHIP_OPTIONS, PROPERTY_TYPE_OPTIONS, URGENCY_OPTIONS } from "@/lib/leads/types";
 import { cn } from "@/lib/utils";
+import { FIELD_CLASS, LABEL_CLASS, TEXTAREA_CLASS } from "@/lib/ui";
 
 interface Draft {
   services: string[];
@@ -30,13 +31,12 @@ const DRAFT_KEY = "hw-quote-draft";
 const MAX_PHOTOS = 5;
 const MAX_BYTES = 8 * 1024 * 1024;
 
-const field =
-  "h-12 w-full rounded-lg border border-input bg-white px-3.5 text-base text-ink placeholder:text-body/60 transition-[border-color,box-shadow] duration-150 focus-visible:border-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ink/15 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/15";
+const field = FIELD_CLASS;
 
 function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-ink">{label}</label>
+      <label htmlFor={id} className={LABEL_CLASS}>{label}</label>
       {children}
       {error && <p id={`${id}-error`} className="text-sm text-destructive">{error}</p>}
     </div>
@@ -308,7 +308,7 @@ export default function QuoteWizard() {
             </div>
             <div className="mt-4">
               <Field id="q-notes" label="Anything else we should know? (optional)">
-                <textarea id="q-notes" rows={4} className={cn(field, "h-auto py-3")} value={draft.notes} onChange={(e) => update("notes", e.target.value)} onKeyDown={(e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") (e.currentTarget.form as HTMLFormElement).requestSubmit(); }} />
+                <textarea id="q-notes" rows={4} className={TEXTAREA_CLASS} value={draft.notes} onChange={(e) => update("notes", e.target.value)} onKeyDown={(e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") (e.currentTarget.form as HTMLFormElement).requestSubmit(); }} />
               </Field>
             </div>
             <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />

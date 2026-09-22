@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cdnUrl } from "@/lib/image";
@@ -52,6 +53,7 @@ export default function ProductListing({ products }: Props) {
   const [active, setActive] = useState<ActiveFilters>({});
   const [hydrated, setHydrated] = useState(false);
   const [open, setOpen] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     setActive(parseFilters(window.location.search, groups));
@@ -115,11 +117,20 @@ export default function ProductListing({ products }: Props) {
             <Button type="button" variant="outline" className="mt-5" onClick={clear}>Clear filters</Button>
           </div>
         ) : (
+          <LayoutGroup>
           <ul className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            <AnimatePresence initial={false} mode="popLayout">
             {visible.map((p) => {
               const image = p.images[0];
               return (
-                <li key={p.slug}>
+                <motion.li
+                  key={p.slug}
+                  layout={reduce ? false : "position"}
+                  initial={reduce ? false : { opacity: 0, scale: 0.97 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={reduce ? undefined : { opacity: 0, scale: 0.97 }}
+                  transition={reduce ? { duration: 0 } : { duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
+                >
                   <a
                     href={`/products/${p.slug}`}
                     className="group flex h-full flex-col rounded-xl bg-white shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]"
@@ -147,10 +158,12 @@ export default function ProductListing({ products }: Props) {
                       )}
                     </div>
                   </a>
-                </li>
+                </motion.li>
               );
             })}
+            </AnimatePresence>
           </ul>
+          </LayoutGroup>
         )}
       </div>
     </div>

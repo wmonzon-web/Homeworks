@@ -6,6 +6,7 @@
  */
 import { ChevronDown } from "@lucide/astro";
 import { getServicesByCategory } from "@/lib/data/services/catalog";
+import { FIELD_CLASS, LABEL_CLASS } from "@/lib/ui";
 
 interface Props {
   /** Visual treatment for the surface it sits on. */
@@ -30,9 +31,8 @@ const {
 const groups = getServicesByCategory();
 const id = (base: string) => `${base}${idSuffix ? `-${idSuffix}` : ""}`;
 
-const fieldBase =
-  "h-12 w-full rounded-lg border border-input bg-white px-3.5 text-base text-ink placeholder:text-body/60 transition-[border-color,box-shadow] duration-150 focus-visible:border-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ink/15 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/15";
-const labelBase = "text-sm font-medium text-ink";
+const fieldBase = FIELD_CLASS;
+const labelBase = LABEL_CLASS;
 const isBar = tone === "bar";
 ---
 

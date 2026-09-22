@@ -26,10 +26,25 @@ const { eyebrow = "Questions", title, lead, faqs, id = "faq-heading", class: cla
               {faq.question}
               <ChevronDown class="size-5 shrink-0 text-body transition-transform duration-150 ease-out group-open:rotate-180" aria-hidden="true" />
             </summary>
-            <p class="max-w-[65ch] pb-6 text-[0.95rem] leading-relaxed text-body">{faq.answer}</p>
+            <p class="max-w-[65ch] pb-6 text-[0.95rem] leading-relaxed text-body" data-faq-answer>{faq.answer}</p>
           </details>
         ))}
       </div>
     </div>
   </div>
 </section>
+
+<script>
+  import { animate } from "motion";
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) {
+    for (const details of document.querySelectorAll<HTMLDetailsElement>("details")) {
+      details.addEventListener("toggle", () => {
+        if (!details.open) return;
+        const answer = details.querySelector<HTMLElement>("[data-faq-answer]");
+        if (answer) animate(answer, { opacity: [0, 1], y: [-6, 0] }, { duration: 0.2, ease: [0.32, 0.72, 0, 1] });
+      });
+    }
+  }
+</script>
+

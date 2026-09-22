@@ -128,12 +128,9 @@ const isBar = tone === "bar";
   <div class:list={["flex flex-col gap-2", isBar ? "" : "mt-1"]}>
     <button
       type="submit"
-      class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] md:w-auto"
+      class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] md:w-auto"
     >
       Get my quote
     </button>
-    {!isBar && (
-      <p class="text-sm text-body">Takes about a minute. No obligation, no spam.</p>
-    )}
   </div>
 </form>

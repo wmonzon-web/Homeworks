@@ -1,0 +1,63 @@
+---
+import HeroLeadForm from "@/components/home/HeroLeadForm.astro";
+import { BUSINESS } from "@/lib/business";
+import type { StaticImage } from "@/lib/data/types";
+import { cdnUrl } from "@/lib/image";
+
+interface Props {
+  /** Optional photograph behind the copy. Renders flat ink when absent. */
+  image?: StaticImage;
+}
+
+const { image } = Astro.props;
+
+const trust = ["Licensed & insured", "Same-week scheduling"];
+---
+
+<section class="dark band-ink relative isolate overflow-hidden" aria-labelledby="hero-heading">
+  {
+    image && (
+      <div class="absolute inset-0 -z-10" aria-hidden="true">
+        <img
+          src={cdnUrl(image.src)}
+          alt=""
+          width={image.width}
+          height={image.height}
+          fetchpriority="high"
+          decoding="async"
+          class="h-full w-full object-cover outline-none"
+        />
+        <div class="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.17_0.012_255/0.92)_0%,oklch(0.17_0.012_255/0.78)_55%,oklch(0.17_0.012_255/0.55)_100%)]" />
+      </div>
+    )
+  }
+
+  <div class="container mx-auto px-4 pt-28 pb-16 md:pt-40 md:pb-24">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Las Vegas home services</p>
+        <h1 id="hero-heading" class="mt-4 text-5xl leading-[0.95] tracking-wide text-white md:text-6xl xl:text-7xl">
+          Repairs &amp; renovations for the house you're keeping.
+        </h1>
+        <p class="mt-6 max-w-[52ch] text-lg leading-relaxed text-white/75 md:text-xl">
+          Drywall, paint, flooring, plumbing, electrical, and the small jobs in
+          between. One licensed Las Vegas crew, scheduled this week, not next month.
+        </p>
+        <p class="mt-8 text-[0.95rem] font-medium text-white/85">
+          {trust.join(" · ")}
+        </p>
+        <p class="mt-3 text-sm text-white/55">
+          Prefer to talk? <a href={`tel:${BUSINESS.phone.e164}`} class="font-medium text-white underline decoration-white/30 underline-offset-4 transition-colors hover:decoration-white">{BUSINESS.phone.display}</a>
+        </p>
+      </div>
+
+      <div class="rounded-2xl bg-white p-6 text-ink shadow-floating md:p-8">
+        <h2 class="font-heading text-2xl font-bold uppercase tracking-wide text-ink">Get a free quote</h2>
+        <p class="mt-1 text-[0.95rem] text-body">About a minute. We reply within one business day.</p>
+        <div class="mt-6">
+          <HeroLeadForm idSuffix="hero" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

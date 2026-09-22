@@ -88,7 +88,7 @@ export const service: Service = {
   faqs: [
     {
       question: "How much does drywall repair cost in Las Vegas?",
-      answer: "Small patches like a doorknob hole are a flat price that covers the patch, texture, and paint. Larger repairs and water damage are priced by the area and whether the leak still needs fixing. Send photos through the quote form and we'll give you a number before anyone comes out.",
+      answer: "Small patches like a doorknob hole are a flat price that covers the patch, texture, and paint. Larger repairs and water damage are priced by the area and whether the leak still needs fixing. Send photos by email and we'll give you a number before anyone comes out.",
     },
     {
       question: "Can you match orange peel or knockdown texture?",

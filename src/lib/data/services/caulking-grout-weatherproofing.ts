@@ -75,7 +75,7 @@ export const service: Service = {
   faqs: [
     {
       question: "How much does it cost to recaulk a shower in Las Vegas?",
-      answer: "A tub or shower re-caulk is a flat price that covers removing the old caulk, treating mildew, and applying color-matched silicone at every wet joint. Grout repair is priced by the area involved. Send photos of the joints through the quote form and we'll give you a number without a visit.",
+      answer: "A tub or shower re-caulk is a flat price that covers removing the old caulk, treating mildew, and applying color-matched silicone at every wet joint. Grout repair is priced by the area involved. Send photos of the joints by email and we'll give you a number without a visit.",
     },
     {
       question: "How often should caulk be replaced in Las Vegas?",

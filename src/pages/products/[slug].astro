@@ -10,7 +10,7 @@ import { getCategoryMeta, getSubcategoryMeta } from "@/lib/data/categories";
 import { getRelatedProducts, products } from "@/lib/data/products";
 import { getServiceSummary } from "@/lib/data/services/catalog";
 import type { Product } from "@/lib/data/types";
-import { absoluteImageUrl, cdnUrl } from "@/lib/image";
+import { absoluteImageUrl } from "@/lib/image";
 import { absoluteUrl, createBreadcrumbSchema } from "@/lib/seo";
 
 export function getStaticPaths() {
@@ -40,7 +40,7 @@ const schema = {
   additionalProperty: product.specs.map((s) => ({ "@type": "PropertyValue", name: s.key, value: s.value })),
   offers: {
     "@type": "Offer",
-    url: absoluteUrl(`/get-quote?service=${product.installServiceSlug ?? ""}`),
+    url: absoluteUrl("/contact"),
     availability: "https://schema.org/InStock",
     priceSpecification: { "@type": "PriceSpecification", description: "Quoted installed" },
     seller: { "@id": `${BUSINESS.siteUrl}/#business` },
@@ -61,7 +61,7 @@ const schema = {
 
       <div class="mt-8 grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         <img
-          src={cdnUrl(image.src)}
+          src={image.src}
           alt={image.alt}
           width={image.width}
           height={image.height}
@@ -87,7 +87,7 @@ const schema = {
           </dl>
 
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href={`/get-quote?service=${product.installServiceSlug ?? ""}&product=${product.slug}`} class="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]">
+            <a href="/contact" class="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]">
               Quote this installed
             </a>
             {installer && (

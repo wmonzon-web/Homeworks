@@ -30,7 +30,7 @@ const serviceSchema = {
   url: absoluteUrl(`/services/${service.slug}`),
   provider: { "@id": `${BUSINESS.siteUrl}/#business` },
   areaServed: BUSINESS.serviceAreas.map((a) => ({ "@type": "City", name: `${a.city}, ${a.state}` })),
-  offers: { "@type": "Offer", url: absoluteUrl(`/get-quote?service=${service.slug}`), availability: "https://schema.org/InStock" },
+  offers: { "@type": "Offer", url: absoluteUrl("/contact"), availability: "https://schema.org/InStock" },
 };
 ---
 

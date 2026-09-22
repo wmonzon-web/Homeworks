@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /thank-you
 
 Sitemap: https://homeworksnv.com/sitemap-index.xml

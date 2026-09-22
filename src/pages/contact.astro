@@ -1,7 +1,6 @@
 ---
 import { Mail, MapPin, Phone } from "@lucide/astro";
 import Base from "@/layouts/Base.astro";
-import ContactForm from "@/components/contact/ContactForm.tsx";
 import { BUSINESS } from "@/lib/business";
 
 const areas = BUSINESS.serviceAreas.map((a) => a.city).join(", ");
@@ -9,16 +8,16 @@ const areas = BUSINESS.serviceAreas.map((a) => a.city).join(", ");
 
 <Base
   title="Contact"
-  description={`Call, email, or message ${BUSINESS.name}. Las Vegas home repairs and renovations, ${BUSINESS.hours.display[0].toLowerCase()}.`}
+  description={`Call or email ${BUSINESS.name}. Las Vegas home repairs and renovations, ${BUSINESS.hours.display[0].toLowerCase()}.`}
 >
   <section class="section pt-6 md:pt-10">
     <div class="container mx-auto px-4">
-      <div class="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <div class="mx-auto max-w-2xl">
         <div>
           <p class="eyebrow">Contact</p>
           <h1 class="mt-3 text-4xl leading-[0.98] md:text-5xl">Talk to a person who can schedule it</h1>
           <p class="mt-4 max-w-[48ch] text-body">
-            For a price, the <a href="/get-quote" class="font-medium text-ink underline decoration-ink/25 underline-offset-4 hover:decoration-brand-red">quote form</a> is fastest. For everything else, this page.
+            Call or email to discuss a repair, ask about a service, or plan your next project.
           </p>
           <dl class="mt-8 flex flex-col gap-5 border-t border-black/10 pt-6">
             <div class="flex items-start gap-3">
@@ -47,9 +46,6 @@ const areas = BUSINESS.serviceAreas.map((a) => a.city).join(", ");
             <p class="text-sm text-body">Hours</p>
             <ul class="mt-1 text-ink">{BUSINESS.hours.display.map((h) => <li>{h}</li>)}</ul>
           </div>
-        </div>
-        <div class="rounded-2xl bg-cream p-6 md:p-8">
-          <ContactForm client:visible />
         </div>
       </div>
     </div>

@@ -3,7 +3,6 @@ import { SlidersHorizontal, X } from "lucide-react";
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import { cdnUrl } from "@/lib/image";
 import type { Product } from "@/lib/data/types";
 import { applyFilters, buildFilterGroups, parseFilters, serializeFilters, type ActiveFilters, type FilterGroup } from "@/components/products/filters";
 
@@ -136,7 +135,7 @@ export default function ProductListing({ products }: Props) {
                     className="group flex h-full flex-col rounded-xl bg-white shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]"
                   >
                     <img
-                      src={cdnUrl(image.src)}
+                      src={image.src}
                       alt={image.alt}
                       width={image.width}
                       height={image.height}

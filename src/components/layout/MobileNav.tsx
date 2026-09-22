@@ -78,8 +78,8 @@ export default function MobileNav({ currentPath }: Props) {
 
         <div className="mt-auto flex flex-col gap-3 pt-8">
           <Button asChild size="lg" className="w-full">
-            <a href="/get-quote" onClick={() => setOpen(false)}>
-              Get a quote
+            <a href="/contact" onClick={() => setOpen(false)}>
+              Contact us
             </a>
           </Button>
           <Button asChild size="lg" variant="outline" className="w-full">

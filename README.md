@@ -1,8 +1,8 @@
 # Homeworks
 
-Marketing site and lead funnel for Homeworks, a Las Vegas home-services company. Astro 7, React islands, Tailwind 4, shadcn/ui, deployed to Cloudflare Workers with D1, R2, and Email Sending.
+Static marketing site for Homeworks, a Las Vegas home-services company. Built with Astro 7, React islands, Tailwind 4, and shadcn/ui. Cloudflare only hosts the generated pages and assets.
 
-Read [AGENTS.md](./AGENTS.md) for the full project context, conventions, bindings, and deployment steps.
+Read [AGENTS.md](./AGENTS.md) for project context and conventions.
 
 ## Prerequisites
 
@@ -12,45 +12,16 @@ Read [AGENTS.md](./AGENTS.md) for the full project context, conventions, binding
 
 ## Clone and run locally
 
-### 1. Clone the repository and install dependencies
-
 ```bash
 git clone https://github.com/wmonzon-web/Homeworks.git
 cd Homeworks
 npm ci
-```
-
-### 2. Set up local environment variables
-
-```bash
-cp .dev.vars.example .dev.vars
-```
-
-In `.dev.vars`, replace the example `PHOTO_LINK_SECRET` with a random string. You can generate one with:
-
-```bash
-node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
-```
-
-This secret signs photo links in quote notifications. `.dev.vars` is ignored by Git.
-
-### 3. Initialize the local database
-
-```bash
-npm run db:migrate:local
-```
-
-This creates the lead tables in the local D1 database. Local database and upload data are stored under `.wrangler/`, which is ignored by Git.
-
-### 4. Start the development server
-
-```bash
 npm run dev
 ```
 
-Open [http://localhost:4321](http://localhost:4321). If that port is occupied, use the address printed in the terminal. Changes to source files reload automatically.
+Open [http://localhost:4321](http://localhost:4321), or the address printed in the terminal if that port is occupied. Source changes reload automatically.
 
-The development server uses local Cloudflare bindings for D1 and R2. Production provisioning is separate; see [deployment instructions in AGENTS.md](./AGENTS.md#deployment) for Cloudflare account setup and real email delivery.
+No environment files, secrets, database migrations, storage buckets, or Cloudflare login are needed to run the site locally.
 
 To stop the development server:
 
@@ -58,39 +29,48 @@ To stop the development server:
 npx astro dev stop
 ```
 
-## Validate changes
+## Validate and preview
 
 ```bash
 npm run check
 npm run build
+npm run preview
 ```
 
-These commands check Astro/TypeScript and create a production build without deploying it.
+The build produces a static site in `dist/`. Use the address printed by the preview command to inspect it.
 
 ## Deploy from GitHub through Cloudflare
 
-Connect this repository to a **Cloudflare Worker** in the account that will host the site. In the Worker's build settings, use:
+For the existing **Cloudflare Workers Builds** project, use these settings:
 
-- Production branch: `main`
-- Root directory: the repository root
-- Build command: `npm run build`
-- Deploy command: `npx wrangler deploy`
+| Setting | Value |
+|---|---|
+| Production branch | `main` |
+| Root directory | Repository root |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy --config wrangler.jsonc` |
 
-Cloudflare runs the deploy command on its build server; contributors do not need to log into Cloudflare or deploy from their computers. Workers Builds still uses Wrangler internally, even when deployment starts from a GitHub push.
+The small `wrangler.jsonc` file identifies the site and tells Cloudflare to serve `dist/`, including clean URLs and the custom 404 page. It has no Worker script, account IDs, service bindings, or environment variables. Cloudflare runs its deployment tooling on the build server; contributors only need to push to GitHub.
 
-The repository intentionally has no Cloudflare account ID or D1 database ID. The build's credentials choose the account, and the database is resolved by its name (`homeworks-leads`). `wrangler.jsonc` retains the portable runtime settings and bindings required by the quote/contact APIs. Removing those bindings would break lead storage, uploads, or email delivery.
+If creating a **Cloudflare Pages** project instead, use build command `npm run build` and output directory `dist`. Pages handles publishing without a separate deploy command.
 
-Astro server sessions are disabled because the site does not use them. Quote drafts use browser `sessionStorage`, so no `SESSION` KV namespace is needed or created by the adapter.
+The build removes the old adapter's generated deployment-config pointer from the local cache so it cannot redirect deployment to the removed backend configuration.
 
-Before testing live forms, follow the [resource and email setup in AGENTS.md](./AGENTS.md#deployment). A successful site deployment alone does not create the lead tables or verify email sending.
+## Current functionality
+
+- Service pages, product browsing/filtering, mobile navigation, and contact details work as static pages with client-side interaction where needed.
+- Quote and contact forms have been removed. There are no submissions, uploads, database writes, or automated emails.
+- Former `/get-quote` and `/thank-you` URLs redirect to `/contact` on Cloudflare.
+- Phone, email, licensing details, product catalog, and photos still need their placeholder values replaced before launch.
 
 ## Scripts
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Dev server in workerd with local D1/R2 |
-| `npm run build` | Production build |
-| `npm run check` | Type-check Astro and TypeScript |
-| `npm run db:migrate:local` | Apply database migrations locally |
-| `npm run typegen` | Regenerate Cloudflare binding types |
-| `npm run deploy` | Build and deploy to Cloudflare |
+| `npm run dev` | Local Astro development server |
+| `npm run check` | Check Astro and TypeScript |
+| `npm run build` | Generate the static site in `dist/` |
+| `npm run preview` | Preview the production build locally |
+| `npm run deploy` | Optional local build and static-asset deployment; not needed for GitHub builds |
+| `npm run og` | Regenerate the default social image |
+| `npm run products:placeholders` | Regenerate placeholder product data and images |

@@ -9,7 +9,7 @@ interface Props {
 
 const {
   title = "Ready when you are.",
-  lead = "Tell us the job in about a minute, or call and talk to a person who can actually schedule it.",
+  lead = "Call or email to tell us about the job and discuss the next step.",
 } = Astro.props;
 ---
 
@@ -21,8 +21,8 @@ const {
         <p class="mt-4 max-w-[52ch] text-lg leading-relaxed text-white/75">{lead}</p>
       </div>
       <div class="flex flex-col gap-3 sm:flex-row">
-        <a href="/get-quote" class="inline-flex h-12 items-center justify-center rounded-lg bg-white px-6 font-heading text-base font-bold uppercase tracking-wide text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-cream focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
-          Get a quote
+        <a href="/contact" class="inline-flex h-12 items-center justify-center rounded-lg bg-white px-6 font-heading text-base font-bold uppercase tracking-wide text-ink transition-[background-color,transform] duration-150 ease-out hover:bg-cream focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
+          Contact us
         </a>
         <a href={`tel:${BUSINESS.phone.e164}`} class="inline-flex h-12 items-center justify-center gap-2 rounded-lg border border-white/25 px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-white/10 focus-visible:ring-3 focus-visible:ring-white/40 focus-visible:outline-none active:scale-[0.96]">
           <Phone class="size-4" aria-hidden="true" />

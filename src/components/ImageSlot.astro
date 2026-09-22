@@ -5,7 +5,6 @@
  * intended shot so the page reads as designed and doubles as the shot list.
  */
 import { Camera } from "@lucide/astro";
-import { cdnUrl } from "@/lib/image";
 import type { StaticImage } from "@/lib/data/types";
 
 interface Props {
@@ -35,7 +34,7 @@ const {
 {
   image ? (
     <img
-      src={cdnUrl(image.src)}
+      src={image.src}
       alt={image.alt || shot}
       width={image.width}
       height={image.height}

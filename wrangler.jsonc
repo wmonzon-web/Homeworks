@@ -1,26 +1,10 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "homeworks",
-  "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-09-01",
-  "compatibility_flags": ["nodejs_compat"],
-  "observability": { "enabled": true },
-  "vars": {
-    "LEAD_FROM": "leads@homeworksnv.com",
-    "LEAD_TO": "leads@homeworksnv.com"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "homeworks-leads",
-      "migrations_dir": "migrations"
-    }
-  ],
-  "r2_buckets": [{ "binding": "UPLOADS", "bucket_name": "homeworks-uploads" }],
-  "send_email": [
-    { "name": "EMAIL", "allowed_destination_addresses": ["leads@homeworksnv.com"] }
-  ],
-  "ratelimits": [
-    { "name": "LEAD_RATE_LIMIT", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }
-  ]
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "drop-trailing-slash",
+    "not_found_handling": "404-page"
+  }
 }

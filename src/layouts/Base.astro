@@ -31,9 +31,6 @@ const {
   skipGlobalSchema = false,
 } = Astro.props;
 
-const cloudflareAnalyticsToken = (
-  import.meta.env.PUBLIC_CLOUDFLARE_ANALYTICS_TOKEN as string | undefined
-)?.trim();
 ---
 
 <!doctype html>
@@ -69,15 +66,5 @@ const cloudflareAnalyticsToken = (
     </main>
     <Footer />
     <slot name="body-end" />
-    {
-      import.meta.env.PROD && cloudflareAnalyticsToken && (
-        <script
-          is:inline
-          defer
-          src="https://static.cloudflareinsights.com/beacon.min.js"
-          data-cf-beacon={JSON.stringify({ token: cloudflareAnalyticsToken })}
-        />
-      )
-    }
   </body>
 </html>

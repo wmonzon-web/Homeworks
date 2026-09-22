@@ -16,7 +16,7 @@ export const GET: APIRoute = () => {
     `- Phone: ${BUSINESS.phone.display}`,
     `- Email: ${BUSINESS.email}`,
     `- Hours: ${BUSINESS.hours.display.join("; ")}`,
-    `- Get a quote: ${absoluteUrl("/get-quote")}`,
+    `- Contact us: ${absoluteUrl("/contact")}`,
     "",
     "## Services",
     "",
@@ -34,6 +34,6 @@ export const GET: APIRoute = () => {
     const subs = getSubcategoriesForCategory(c.slug).map((s) => s.label).join(", ");
     lines.push(`- [${c.label}](${absoluteUrl(`/products/category/${c.slug}`)}): ${c.description} Subcategories: ${subs}.`);
   }
-  lines.push("", "## Contact", "", `- [Contact page](${absoluteUrl("/contact")})`, `- [Request a quote](${absoluteUrl("/get-quote")})`, "");
+  lines.push("", "## Contact", "", `- [Contact page](${absoluteUrl("/contact")})`, "");
   return new Response(lines.join("\n"), { headers: { "content-type": "text/plain; charset=utf-8" } });
 };

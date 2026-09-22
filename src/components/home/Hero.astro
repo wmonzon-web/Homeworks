@@ -1,9 +1,6 @@
 ---
-import HeroLeadForm from "@/components/home/HeroLeadForm.astro";
 import { BUSINESS } from "@/lib/business";
 import type { StaticImage } from "@/lib/data/types";
-import { cdnUrl } from "@/lib/image";
-import ImageSlot from "@/components/ImageSlot.astro";
 
 interface Props {
   /** Optional photograph behind the copy. Renders flat ink when absent. */
@@ -28,7 +25,7 @@ const trust = ["Licensed & insured", "Same-week scheduling"];
   <div class="absolute inset-0 -z-10" aria-hidden="true">
     {image ? (
       <img
-        src={cdnUrl(image.src)}
+        src={image.src}
         alt=""
         width={image.width}
         height={image.height}
@@ -65,10 +62,13 @@ const trust = ["Licensed & insured", "Same-week scheduling"];
       </div>
 
       <div class="light rounded-2xl bg-white p-6 text-ink shadow-floating md:p-8">
-        <h2 class="font-heading text-2xl font-bold uppercase tracking-wide text-ink">Get a free quote</h2>
-        <p class="mt-1 text-[0.95rem] text-body">About a minute. We reply within one business day.</p>
+        <h2 class="font-heading text-2xl font-bold uppercase tracking-wide text-ink">Plan your project</h2>
+        <p class="mt-1 text-[0.95rem] text-body">Explore our services, then get in touch to discuss what your home needs.</p>
         <div class="mt-6">
-          <HeroLeadForm idSuffix="hero" />
+          <div class="flex flex-col gap-3">
+            <a href="/services" class="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 hover:bg-ink-soft focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink active:scale-[0.96]">Browse services</a>
+            <a href="/contact" class="inline-flex h-12 items-center justify-center rounded-lg bg-cream px-6 font-heading text-base font-bold uppercase tracking-wide text-ink shadow-raised transition-[background-color,transform] duration-150 hover:bg-cream-deep focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink active:scale-[0.96]">Contact us</a>
+          </div>
         </div>
       </div>
     </div>

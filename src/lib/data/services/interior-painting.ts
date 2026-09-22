@@ -81,7 +81,7 @@ export const service: Service = {
   faqs: [
     {
       question: "How much does it cost to paint a room in Las Vegas?",
-      answer: "Most rooms are quoted as a flat price based on wall square footage, ceiling height, and whether ceilings, trim, and doors are included. Color changes from dark to light or vice versa and heavy patching add to it. Send photos and rough dimensions through the quote form and you'll get a number before we schedule anything.",
+      answer: "Most rooms are quoted as a flat price based on wall square footage, ceiling height, and whether ceilings, trim, and doors are included. Color changes from dark to light or vice versa and heavy patching add to it. Send photos and rough dimensions by email and you'll get a number before we schedule anything.",
     },
     {
       question: "How long does interior painting take?",

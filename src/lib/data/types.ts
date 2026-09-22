@@ -40,6 +40,8 @@ export interface ServiceContentSection {
   lead: string;
   body: string[];
   image?: StaticImage;
+  /** What the section photo should show. Rendered as a labeled placeholder until `image` exists. */
+  shot?: string;
   highlights?: Array<{ icon?: string; label: string; detail: string }>;
   callout?: { type: "tip" | "insight" | "local"; title: string; text: string };
 }
@@ -54,6 +56,8 @@ export interface Service extends ServiceSummary {
   tagline: string;
   contentSections: ServiceContentSection[];
   heroImage?: StaticImage;
+  /** Intended hero photograph, used as the placeholder label. */
+  heroShot?: string;
   quickFacts?: ServiceQuickFacts;
   benefits: Array<{ icon?: string; title: string; description: string }>;
   process: Array<{ title: string; description: string; image?: StaticImage }>;

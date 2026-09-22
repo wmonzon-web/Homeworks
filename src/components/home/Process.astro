@@ -1,21 +1,26 @@
 ---
 import SectionHeading from "@/components/SectionHeading.astro";
+import ImageSlot from "@/components/ImageSlot.astro";
 
 const steps = [
   {
     title: "Tell us the job",
+    shot: "Phone in hand photographing a cracked wall corner",
     body: "Pick the service, drop in your ZIP and phone, and add photos if you have them. Under a minute, no account.",
   },
   {
     title: "Get a real number",
+    shot: "Quote on a phone screen with a flat price and a date",
     body: "Repairs are usually a flat price from your photos. Bigger work gets a written scope after a quick walkthrough.",
   },
   {
     title: "Pick a day this week",
+    shot: "Homeworks van parked in a driveway, morning",
     body: "We schedule repairs within the week and lock renovation start dates in the quote, so there's no chasing.",
   },
   {
     title: "We do it and clean up",
+    shot: "Tech rolling up a drop cloth in a finished room",
     body: "One licensed crew, one point of contact, drop cloths down, and the house left the way we found it, only fixed.",
   },
 ];
@@ -30,13 +35,16 @@ const steps = [
     />
     <ol class="mt-10 grid gap-x-8 gap-y-8 md:grid-cols-2 lg:grid-cols-4">
       {steps.map((step, i) => (
-        <li class="flex gap-4 border-t border-black/10 pt-5">
+        <li class="flex flex-col gap-4 border-t border-black/10 pt-5">
+          <ImageSlot shot={step.shot} aspect="16/10" class="rounded-xl" sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw" />
+          <div class="flex gap-4">
           <span class="font-heading text-3xl leading-none font-bold text-brand-red tabular-nums" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
           <div>
             <h3 class="font-heading text-xl leading-tight font-bold uppercase tracking-wide text-ink">
               <span class="sr-only">Step {i + 1}: </span>{step.title}
             </h3>
             <p class="mt-2 text-[0.95rem] leading-relaxed text-body">{step.body}</p>
+          </div>
           </div>
         </li>
       ))}

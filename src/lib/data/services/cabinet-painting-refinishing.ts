@@ -34,7 +34,7 @@ export const service: Service = {
         "Primer is a bonding primer chosen for the surface: shellac-based or a dedicated adhesion primer over slick factory lacquer, and a stain-blocking primer over oak so the tannins don't bleed yellow through a white finish. The primer is sanded lightly before the topcoat. Skipping the sand between coats is why some painted cabinets feel rough or show dust nibs when you run a hand over them.",
       ],
       highlights: [
-        { icon: "droplets", label: "Degreased, not just wiped", detail: "Cooking residue removed with a real degreaser so the primer bonds to wood, not oil." },
+        { icon: "droplets", label: "Degreased before primer", detail: "Cooking residue removed with a real degreaser so the primer bonds to wood, not oil." },
         { icon: "shield-check", label: "Bonding and stain-blocking primer", detail: "Adhesion primer over slick lacquer, tannin blocker over oak, sanded before topcoat." },
         { icon: "layers", label: "Filled and sanded flush", detail: "Old hardware holes, dings, and optional grain fill so the sprayed finish reads flat." },
       ],

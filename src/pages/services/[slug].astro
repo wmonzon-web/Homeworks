@@ -42,9 +42,9 @@ const serviceSchema = {
 >
   <ServiceHero service={service} />
   {service.quickFacts && <QuickFacts facts={service.quickFacts} />}
-  <ServiceContent sections={service.contentSections} />
+  <ServiceContent sections={service.contentSections} serviceName={service.shortName} />
   <ServiceBenefits service={service} />
-  <NumberedSteps title={`How a ${service.shortName.toLowerCase()} job goes`} steps={service.process} />
+  <NumberedSteps title={`How a ${service.shortName.toLowerCase()} job goes`} steps={service.process} photos shotPrefix={service.shortName} />
   <Faq id="service-faq" title={`${service.shortName} questions`} lead="Answered the way we'd answer them on the phone." faqs={service.faqs} />
   <OtherServices service={service} />
   <Cta title={`Ready to book ${service.shortName.toLowerCase()}?`} lead="Send a few photos and we'll come back with a number, usually the same day." />

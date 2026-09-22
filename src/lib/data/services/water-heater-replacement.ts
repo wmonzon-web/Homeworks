@@ -14,7 +14,7 @@ export const service: Service = {
   contentSections: [
     {
       heading: "Water heater replacement in Las Vegas, done to code the first time",
-      lead: "A water heater swap is not just lifting out the old tank; it's the half dozen code items around it that quick installs skip.",
+      lead: "A water heater swap is the half dozen code items around the tank that quick installs skip, plus lifting the old one out.",
       body: [
         "Water heater replacement means draining and disconnecting the old unit, setting a new tank or tankless heater, connecting the water, gas or electrical, and vent, and adding the items current code requires that your old install probably didn't have: a thermal expansion tank, two seismic straps, a drain pan with a line to the exterior, a full-size temperature and pressure relief discharge, and a permit with inspection. We handle all of it, haul the old tank, and test for gas and water leaks before we leave.",
         "Most Las Vegas homes have a 40- or 50-gallon gas tank in the garage, and a good share of those tanks went in before the current expansion tank and strapping rules. We replace like for like when that's the right call, size up when a family has outgrown the tank, or convert to tankless when the gas line and venting make it practical. We'll give you a straight comparison of the three, with the numbers side by side, rather than steering you toward the most expensive option.",

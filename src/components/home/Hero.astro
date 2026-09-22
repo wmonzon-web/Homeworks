@@ -3,6 +3,7 @@ import HeroLeadForm from "@/components/home/HeroLeadForm.astro";
 import { BUSINESS } from "@/lib/business";
 import type { StaticImage } from "@/lib/data/types";
 import { cdnUrl } from "@/lib/image";
+import ImageSlot from "@/components/ImageSlot.astro";
 
 interface Props {
   /** Optional photograph behind the copy. Renders flat ink when absent. */
@@ -15,22 +16,25 @@ const trust = ["Licensed & insured", "Same-week scheduling"];
 ---
 
 <section class="dark band-ink relative isolate overflow-hidden" aria-labelledby="hero-heading">
-  {
-    image && (
-      <div class="absolute inset-0 -z-10" aria-hidden="true">
-        <img
-          src={cdnUrl(image.src)}
-          alt=""
-          width={image.width}
-          height={image.height}
-          fetchpriority="high"
-          decoding="async"
-          class="h-full w-full object-cover outline-none"
-        />
-        <div class="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.17_0.012_255/0.92)_0%,oklch(0.17_0.012_255/0.78)_55%,oklch(0.17_0.012_255/0.55)_100%)]" />
-      </div>
-    )
-  }
+  <div class="absolute inset-0 -z-10" aria-hidden="true">
+    {image ? (
+      <img
+        src={cdnUrl(image.src)}
+        alt=""
+        width={image.width}
+        height={image.height}
+        fetchpriority="high"
+        decoding="async"
+        class="h-full w-full object-cover outline-none"
+      />
+    ) : (
+      <div class="h-full w-full bg-[oklch(0.3_0.01_255)]" style="background-image: linear-gradient(135deg, oklch(0.34 0.01 255) 0 1px, transparent 1px 28px)"></div>
+    )}
+    <div class="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.17_0.012_255/0.94)_0%,oklch(0.17_0.012_255/0.82)_50%,oklch(0.17_0.012_255/0.6)_100%)]"></div>
+    {!image && (
+      <span class="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-md bg-white/10 px-2.5 py-1.5 text-xs text-white/70">Photo: crew finishing a wall in a Las Vegas living room, wide, natural light</span>
+    )}
+  </div>
 
   <div class="container mx-auto px-4 pt-28 pb-16 md:pt-40 md:pb-24">
     <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">

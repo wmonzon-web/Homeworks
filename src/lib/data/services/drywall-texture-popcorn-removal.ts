@@ -69,7 +69,7 @@ export const service: Service = {
   benefits: [
     { title: "Flat under side light", description: "A full skim coat, not a scrape-and-paint, so the ceiling looks new when the afternoon sun hits it." },
     { title: "Texture that disappears", description: "Orange peel and knockdown matched on a test board before it goes on your wall." },
-    { title: "Finished, not just scraped", description: "Primer, paint, fixtures rehung, and the plastic gone, by the same crew that scraped." },
+    { title: "Painted and rehung", description: "Primer, paint, fixtures rehung, and the plastic gone, by the same crew that scraped." },
   ],
   process: [
     { title: "Look, test if needed, quote", description: "We check whether the popcorn is painted, test for asbestos on older homes, and price per square foot of ceiling." },

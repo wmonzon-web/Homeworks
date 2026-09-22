@@ -62,7 +62,7 @@ export const service: Service = {
     },
   ],
   benefits: [
-    { title: "Matched, not just patched", description: "Texture matched on a test panel and paint carried to a natural break, so the repair doesn't announce itself." },
+    { title: "Texture matched on a test panel", description: "Texture matched on a test panel and paint carried to a natural break, so the repair doesn't announce itself." },
     { title: "The cause gets fixed", description: "Sprinklers, downspouts, and open joints that caused the damage are corrected so the same spot doesn't fail again." },
     { title: "Wood and stucco together", description: "Fascia, trim, sealant, and stucco handled by one crew on one visit instead of three trades." },
   ],

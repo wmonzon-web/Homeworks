@@ -1,51 +1,43 @@
 ---
+import ImageSlot from "@/components/ImageSlot.astro";
 import ServiceIcon from "@/components/ServiceIcon.astro";
-import { cdnUrl } from "@/lib/image";
 import type { ServiceContentSection } from "@/lib/data/types";
 
-interface Props { sections: ServiceContentSection[] }
-const { sections } = Astro.props;
+interface Props { sections: ServiceContentSection[]; serviceName: string }
+const { sections, serviceName } = Astro.props;
 
 const calloutIcon = { tip: "lightbulb", insight: "info", local: "map-pin" } as const;
 ---
 
 {sections.map((section, index) => {
   const tinted = index % 2 === 1;
-  const reversed = index % 2 === 1;
+  const imageRight = index % 2 === 0;
+  const shot = section.shot ?? `${serviceName}: ${section.heading.toLowerCase()}`;
   return (
     <section class:list={["section", tinted ? "band-cream" : "bg-white"]} aria-labelledby={`section-${index}`}>
       <div class="container mx-auto px-4">
-        {section.image ? (
-          <div class:list={["grid items-center gap-8 lg:grid-cols-2 lg:gap-16", reversed && "lg:[&>*:first-child]:order-last"]}>
-            <img
-              src={cdnUrl(section.image.src)}
-              alt={section.image.alt}
-              width={section.image.width}
-              height={section.image.height}
-              loading="lazy"
-              decoding="async"
-              class="aspect-[16/10] w-full rounded-2xl object-cover"
-            />
-            <div class="max-w-[62ch]">
-              <h2 id={`section-${index}`} class="text-3xl leading-[1.05] md:text-4xl">{section.heading}</h2>
-              <p class="mt-4 text-lg leading-relaxed text-ink">{section.lead}</p>
-              {section.body.map((p) => <p class="mt-4 leading-relaxed text-body">{p}</p>)}
-            </div>
+        <div class:list={["grid items-start gap-8 lg:grid-cols-2 lg:gap-16", imageRight ? "" : "lg:[&>*:first-child]:order-last"]}>
+          <div class="max-w-[62ch] lg:sticky lg:top-28">
+            <h2 id={`section-${index}`} class="text-3xl leading-[1.05] md:text-4xl">{section.heading}</h2>
+            <p class="mt-4 text-lg leading-relaxed text-ink">{section.lead}</p>
+            {section.body.map((p) => <p class="mt-4 leading-relaxed text-body">{p}</p>)}
           </div>
-        ) : (
-          <div class="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-            <div>
-              <h2 id={`section-${index}`} class="text-3xl leading-[1.05] md:text-4xl">{section.heading}</h2>
-              <p class="mt-4 max-w-[48ch] text-lg leading-relaxed text-ink">{section.lead}</p>
-            </div>
-            <div class="max-w-[65ch]">
-              {section.body.map((p, i) => <p class:list={["leading-relaxed text-body", i > 0 && "mt-4"]}>{p}</p>)}
-            </div>
+          <div class="flex flex-col gap-4">
+            <ImageSlot image={section.image} shot={shot} aspect={index % 2 === 0 ? "4/3" : "3/4"} class={index % 2 === 0 ? "" : "max-h-[34rem] lg:max-w-md lg:justify-self-end"} sizes="(min-width: 1024px) 50vw, 100vw" />
+            {section.callout && (
+              <aside class:list={["rounded-xl border-l-4 border-brand-red p-5", tinted ? "bg-white" : "bg-cream"]}>
+                <p class="flex items-center gap-2 font-heading text-lg leading-tight font-bold uppercase tracking-wide text-ink">
+                  <ServiceIcon name={calloutIcon[section.callout.type]} class="size-4.5 shrink-0 text-brand-red" />
+                  {section.callout.title}
+                </p>
+                <p class="mt-2 text-[0.95rem] leading-relaxed text-body">{section.callout.text}</p>
+              </aside>
+            )}
           </div>
-        )}
+        </div>
 
         {section.highlights && section.highlights.length > 0 && (
-          <dl class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-3">
+          <dl class="mt-12 grid gap-x-8 gap-y-6 sm:grid-cols-3">
             {section.highlights.map((h) => (
               <div class="border-t border-black/10 pt-4">
                 <dt class="flex items-center gap-2 font-heading text-lg leading-tight font-bold uppercase tracking-wide text-ink">
@@ -56,16 +48,6 @@ const calloutIcon = { tip: "lightbulb", insight: "info", local: "map-pin" } as c
               </div>
             ))}
           </dl>
-        )}
-
-        {section.callout && (
-          <aside class:list={["mt-10 max-w-3xl rounded-xl border-l-4 border-brand-red p-5 md:p-6", tinted ? "bg-white" : "bg-cream"]}>
-            <p class="flex items-center gap-2 font-heading text-lg leading-tight font-bold uppercase tracking-wide text-ink">
-              <ServiceIcon name={calloutIcon[section.callout.type]} class="size-4.5 shrink-0 text-brand-red" />
-              {section.callout.title}
-            </p>
-            <p class="mt-2 text-[0.95rem] leading-relaxed text-body">{section.callout.text}</p>
-          </aside>
         )}
       </div>
     </section>

@@ -1,0 +1,66 @@
+---
+/**
+ * A photograph, or the frame it will occupy. When `image` is absent the slot
+ * renders a neutral placeholder at the final aspect ratio, labeled with the
+ * intended shot so the page reads as designed and doubles as the shot list.
+ */
+import { Camera } from "@lucide/astro";
+import { cdnUrl } from "@/lib/image";
+import type { StaticImage } from "@/lib/data/types";
+
+interface Props {
+  image?: StaticImage;
+  /** What the photo should show; used as the placeholder label and, if `image.alt` is empty, the alt. */
+  shot: string;
+  /** CSS aspect ratio, e.g. "4/3", "16/10", "3/4". */
+  aspect?: string;
+  /** Rounded corners; off for full-bleed use. */
+  rounded?: boolean;
+  priority?: boolean;
+  class?: string;
+  sizes?: string;
+}
+
+const {
+  image,
+  shot,
+  aspect = "4/3",
+  rounded = true,
+  priority = false,
+  class: className,
+  sizes,
+} = Astro.props;
+---
+
+{
+  image ? (
+    <img
+      src={cdnUrl(image.src)}
+      alt={image.alt || shot}
+      width={image.width}
+      height={image.height}
+      loading={priority ? "eager" : "lazy"}
+      fetchpriority={priority ? "high" : undefined}
+      decoding="async"
+      sizes={sizes}
+      class:list={["w-full object-cover", rounded && "rounded-2xl", className]}
+      style={`aspect-ratio:${aspect}`}
+    />
+  ) : (
+    <div
+      role="img"
+      aria-label={`Photo placeholder: ${shot}`}
+      class:list={[
+        "relative flex w-full items-end overflow-hidden bg-[oklch(0.9_0.004_255)] select-none",
+        rounded && "rounded-2xl",
+        className,
+      ]}
+      style={`aspect-ratio:${aspect}; background-image: linear-gradient(135deg, oklch(0.88 0.004 255) 0 1px, transparent 1px 28px)`}
+    >
+      <span class="m-3 inline-flex max-w-full items-center gap-2 rounded-md bg-white/85 px-2.5 py-1.5 text-xs leading-tight text-body backdrop-blur-sm">
+        <Camera class="size-3.5 shrink-0" aria-hidden="true" />
+        <span class="truncate">Photo: {shot}</span>
+      </span>
+    </div>
+  )
+}

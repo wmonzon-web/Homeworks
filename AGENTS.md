@@ -27,7 +27,7 @@ Placeholders that must be replaced before launch:
 
 - `src/lib/business.ts` phone, email, license number, socials (marked `PLACEHOLDER`)
 - All product data and images (`src/lib/data/products/*`, `public/images/products/*`)
-- Hero photograph (`Hero.astro` takes an optional `image`; renders flat ink without one)
+- Every photo: the hero, service heroes, content sections, and process steps render labeled placeholder frames (`ImageSlot`) until real images are supplied
 - The "Licensed & insured" and "Same-week scheduling" claims in the hero and services copy must be confirmed true
 - `wrangler.jsonc` `database_id`, `LEAD_TO`, and `allowed_destination_addresses`
 
@@ -58,7 +58,7 @@ Not built: portfolio, pricing/membership pages, Turnstile, webhook delivery to a
 - `src/components/products/*`: cards, `filters.ts`, `ProductListing.tsx` island
 - `src/components/quote/*`: `QuoteWizard.tsx` island and `OptionCard.tsx`
 - `src/components/contact/ContactForm.tsx`: island
-- `src/components/{SectionHeading,Faq,Cta,NumberedSteps,ServiceIcon}.astro`: shared sections
+- `src/components/{SectionHeading,Faq,Cta,NumberedSteps,ServiceIcon,ImageSlot}.astro`: shared sections. `ImageSlot` renders a photo or, when `image` is absent, a labeled gray frame at the final aspect ratio; the label is the shot list
 - `src/components/seo/{SEO,JsonLd}.astro`
 - `src/lib/business.ts`: the only place business facts live
 - `src/lib/seo.ts`, `image.ts`, `utils.ts`
@@ -125,6 +125,7 @@ Not built: portfolio, pricing/membership pages, Turnstile, webhook delivery to a
 - Business facts only from `src/lib/business.ts`. Never hardcode the name, phone, email, hours, or areas
 - `.astro` for anything static; `.tsx` islands only when the UI needs client state (`MobileNav`, `QuoteWizard`, `ContactForm`, `ProductListing`)
 - Image `src` values in data stay as `/images/...`; wrap with `cdnUrl()` at render time so a CDN origin can be added with `PUBLIC_CDN_URL`
+- Photos go through `ImageSlot` with a `shot` description. Until real photos exist the placeholder frames stay; when a photo lands, pass `image` and keep the `shot` as its alt fallback. Service data can set `heroShot` and per-section `shot`; otherwise the label derives from the heading
 - Every section opens with `SectionHeading` (red eyebrow, condensed heading). Red is reserved for the wordmark mark, eyebrows, step numbers, and one CTA at most
 - Buttons: 12px radius, condensed uppercase. Cards: `shadow-raised`, never a solid border for depth. Separation lines: `border-black/10`
 - Transitions list properties explicitly (no `transition-all`); press feedback is `active:scale-[0.96]`; hover only changes color, shadow, or transform

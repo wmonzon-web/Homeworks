@@ -69,7 +69,7 @@ export const service: Service = {
   ],
   benefits: [
     { title: "Even in side light", description: "Filled, primed, and rolled wet-edge so afternoon sun through a west window shows color, not roller marks." },
-    { title: "Washable, not just pretty", description: "Sheens chosen for how each room is used, so scuffs wipe off instead of needing a touch-up." },
+    { title: "Sheen picked per room", description: "Sheens chosen for how each room is used, so scuffs wipe off instead of needing a touch-up." },
     { title: "Drywall fixed under the paint", description: "Cracks and patches finished properly before color goes on, so they don't reappear next season." },
   ],
   process: [

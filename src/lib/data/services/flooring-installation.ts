@@ -48,7 +48,7 @@ export const service: Service = {
       ],
       callout: {
         type: "tip",
-        title: "Pick the wear layer, not just the look",
+        title: "Ask for the wear layer in mils",
         text: "For LVP, ask for the wear layer thickness in mils. 12 mil is fine for a guest room; 20 mil or more is what holds up in a kitchen with dogs and dining chairs. It matters more than the plank's overall thickness.",
       },
     },

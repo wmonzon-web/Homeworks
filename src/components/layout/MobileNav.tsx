@@ -29,7 +29,7 @@ export default function MobileNav({ currentPath }: Props) {
         <Menu className="size-5" aria-hidden="true" />
       </SheetTrigger>
 
-      <SheetContent
+      <SheetContent open={open}
         side="right"
         showCloseButton={false}
         className="flex w-[min(100vw,22rem)] flex-col gap-0 px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]"

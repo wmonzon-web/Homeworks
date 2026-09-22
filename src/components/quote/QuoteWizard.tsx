@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { MOTION_EASE } from "@/lib/motion";
 import { ArrowLeft, Camera, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { OptionCard } from "@/components/quote/OptionCard";
@@ -42,6 +44,11 @@ function Field({ id, label, error, children }: { id: string; label: string; erro
 }
 
 export default function QuoteWizard() {
+  const reduceMotion = useReducedMotion();
+  const pointerInteraction = useRef(false);
+  const advanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [direction, setDirection] = useState(1);
+  const [animateStep, setAnimateStep] = useState(false);
   const [draft, setDraft] = useState<Draft>(EMPTY);
   const [step, setStep] = useState(0);
   const [photos, setPhotos] = useState<File[]>([]);
@@ -83,11 +90,20 @@ export default function QuoteWizard() {
   }, [step, ready]);
 
   const update = <K extends keyof Draft>(key: K, value: Draft[K]) => setDraft((d) => ({ ...d, [key]: value }));
-  const next = () => setStep((s) => Math.min(s + 1, STEPS.length - 1));
-  const back = () => setStep((s) => Math.max(s - 1, 0));
+  useEffect(() => () => { if (advanceTimer.current) clearTimeout(advanceTimer.current); }, []);
+
+  const move = (direction: number) => {
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    setDirection(direction);
+    setAnimateStep(pointerInteraction.current && !reduceMotion);
+    setStep((s) => Math.max(0, Math.min(s + direction, STEPS.length - 1)));
+  };
+  const next = () => move(1);
+  const back = () => move(-1);
   const pick = (key: keyof Draft, value: string) => {
     update(key, value as never);
-    window.setTimeout(next, 150);
+    if (advanceTimer.current) clearTimeout(advanceTimer.current);
+    advanceTimer.current = setTimeout(next, reduceMotion || !pointerInteraction.current ? 0 : 150);
   };
 
   const grouped = useMemo(
@@ -144,17 +160,18 @@ export default function QuoteWizard() {
     }
   };
 
+  const shouldAnimate = animateStep && !reduceMotion;
   const pct = Math.round(((step + 1) / STEPS.length) * 100);
 
   return (
-    <form onSubmit={submit} noValidate className={cn("mx-auto max-w-2xl", !ready && "invisible")} aria-labelledby="wizard-heading">
+    <form onPointerDownCapture={() => { pointerInteraction.current = true; }} onKeyDownCapture={() => { pointerInteraction.current = false; }} onSubmit={submit} noValidate className={cn("mx-auto max-w-2xl", !ready && "invisible")} aria-labelledby="wizard-heading">
       <div className="mb-8">
         <div className="flex items-center justify-between text-sm text-body">
           <span className="tabular-nums">Step {step + 1} of {STEPS.length}</span>
           <span className="font-medium text-ink">{STEPS[step]}</span>
         </div>
         <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-cream" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Progress">
-          <div className="h-full rounded-full bg-ink transition-[width] duration-300 ease-out" style={{ width: `${pct}%` }} />
+          <motion.div initial={false} animate={{ scaleX: pct / 100 }} transition={{ duration: shouldAnimate ? 0.22 : 0, ease: MOTION_EASE }} className="h-full origin-left rounded-full bg-ink" />
         </div>
       </div>
 
@@ -164,7 +181,7 @@ export default function QuoteWizard() {
         </Button>
       )}
 
-      <div key={step} className="animate-in fade-in slide-in-from-right-2 duration-200 motion-reduce:animate-none">
+      <motion.div key={step} initial={shouldAnimate ? { opacity: 0, x: direction * 10 } : false} animate={{ opacity: 1, x: 0 }} transition={{ duration: shouldAnimate ? 0.2 : 0, ease: MOTION_EASE }}>
         {step === 0 && (
           <fieldset>
             <legend className="sr-only">Services</legend>
@@ -234,7 +251,7 @@ export default function QuoteWizard() {
             <legend className="sr-only">Photos</legend>
             <h2 id="wizard-heading" ref={headingRef} tabIndex={-1} className="text-3xl leading-[1.02] outline-none md:text-4xl">Got photos?</h2>
             <p className="mt-2 text-body">Optional, but a couple of photos usually means a flat price without a visit. Up to {MAX_PHOTOS}, 8 MB each.</p>
-            <label className="mt-6 flex min-h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-black/20 bg-cream p-6 text-center transition-colors hover:border-ink focus-within:border-ink">
+            <label className="mt-6 flex min-h-32 cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-input bg-cream p-6 text-center transition-colors hover:border-ink focus-within:border-ink">
               <Camera className="size-6 text-ink" aria-hidden="true" />
               <span className="font-heading text-lg font-bold uppercase tracking-wide text-ink">Add photos</span>
               <span className="text-sm text-body">Tap to choose, or take one now</span>
@@ -304,7 +321,7 @@ export default function QuoteWizard() {
             <p className="mt-3 text-sm text-body">We reply within one business day. Urgent? Call {BUSINESS.phone.display}.</p>
           </fieldset>
         )}
-      </div>
+      </motion.div>
     </form>
   );
 }

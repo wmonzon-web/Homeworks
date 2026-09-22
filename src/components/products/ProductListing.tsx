@@ -95,7 +95,7 @@ export default function ProductListing({ products }: Props) {
                 Filters{activeCount > 0 ? ` (${activeCount})` : ""}
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[min(100vw,22rem)] overflow-y-auto px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+            <SheetContent open={open} side="right" className="w-[min(100vw,22rem)] overflow-y-auto px-6 pt-5 pb-[max(1.5rem,env(safe-area-inset-bottom))]">
               <SheetTitle className="font-heading text-xl font-bold uppercase tracking-wide text-ink">Filters</SheetTitle>
               <SheetDescription className="sr-only">Narrow the product list</SheetDescription>
               <div className="mt-6">

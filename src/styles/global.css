@@ -67,7 +67,7 @@
   --shadow-floating: var(--elevation-floating);
 }
 
-:root {
+:root, .light {
   /* Source palette */
   --ink: oklch(0.17 0.012 255);          /* #0C1015 near-black */
   --ink-soft: oklch(0.24 0.012 255);     /* hover/lift on ink surfaces */
@@ -94,7 +94,7 @@
   --accent-foreground: var(--ink);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.9 0.008 75);
-  --input: oklch(0.9 0.008 75);
+  --input: oklch(0.65 0 0);
   --ring: var(--ink);
   --chart-1: var(--ink);
   --chart-2: var(--brand-red);
@@ -149,7 +149,7 @@
   --accent-foreground: oklch(1 0 0);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 12%);
-  --input: oklch(1 0 0 / 16%);
+  --input: oklch(1 0 0 / 45%);
   --ring: oklch(1 0 0);
   --elevation-raised: 0 0 0 1px oklch(1 0 0 / 0.09);
   --elevation-raised-hover: 0 0 0 1px oklch(1 0 0 / 0.14);
@@ -199,6 +199,14 @@
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
+    }
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
+      scroll-behavior: auto !important;
+    }
+    :active {
+      scale: none !important;
     }
   }
 }

@@ -37,6 +37,7 @@ Not built: portfolio, pricing/membership pages, Turnstile, webhook delivery to a
 
 - Astro 7 (static output; only `src/pages/api/*` are server routes)
 - React 19 islands only where interaction needs state
+- Motion (`motion/react`) for user-triggered wizard and sheet transitions; timing curve in `src/lib/motion.ts`
 - Tailwind CSS 4 via `@tailwindcss/vite`, tokens in `src/styles/global.css`
 - shadcn/ui (`radix-nova` style) for the React primitives in `src/components/ui`
 - `@lucide/astro` in `.astro` files, `lucide-react` in `.tsx`
@@ -129,6 +130,8 @@ Not built: portfolio, pricing/membership pages, Turnstile, webhook delivery to a
 - Every section opens with `SectionHeading` (red eyebrow, condensed heading). Red is reserved for the wordmark mark, eyebrows, step numbers, and one CTA at most
 - Buttons: 12px radius, condensed uppercase. Cards: `shadow-raised`, never a solid border for depth. Separation lines: `border-black/10`
 - Transitions list properties explicitly (no `transition-all`); press feedback is `active:scale-[0.96]`; hover only changes color, shadow, or transform
+- Form edges use the visible `border-input` token; white surfaces inside `.dark` bands use `.light` to restore light tokens. Keep form borders at 1px (2px for option controls), not hairlines.
+- Motion uses only transform/opacity: wizard steps 200ms, progress 220ms, sheets 240ms in / 180ms out. No initial-load or scroll reveals. Respect reduced motion (including fades); keyboard wizard navigation is immediate.
 - Inputs are 16px or larger; every input has a `<label for>`; errors render next to the field with `aria-describedby`
 - No fabricated proof: no invented stats, testimonials, logos, or awards. Leave the space empty until real ones exist
 - Never import `cloudflare:workers` from prerendered pages or data modules

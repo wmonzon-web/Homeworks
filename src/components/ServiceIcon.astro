@@ -1,0 +1,88 @@
+---
+/**
+ * Maps a data-file icon key to a Lucide glyph so content stays serializable.
+ * Unknown keys fall back to a wrench so a typo never renders nothing.
+ */
+import {
+  Bath,
+  Blinds,
+  Brush,
+  CookingPot,
+  DoorOpen,
+  Droplets,
+  Fan,
+  Flame,
+  Grid2x2,
+  Hammer,
+  Layers,
+  PaintBucket,
+  PaintRoller,
+  Paintbrush,
+  Ruler,
+  SprayCan,
+  Sun,
+  Toilet,
+  Wrench,
+  Zap,
+  ShieldCheck,
+  Clock3,
+  Sparkles,
+  CircleCheck,
+  BadgeCheck,
+  CalendarCheck,
+  Camera,
+  Phone,
+  House,
+  Lightbulb,
+  Info,
+  MapPin,
+} from "@lucide/astro";
+
+interface Props {
+  name?: string;
+  class?: string;
+  strokeWidth?: number;
+}
+
+const ICONS = {
+  bath: Bath,
+  blinds: Blinds,
+  brush: Brush,
+  "cooking-pot": CookingPot,
+  "door-open": DoorOpen,
+  droplets: Droplets,
+  fan: Fan,
+  flame: Flame,
+  "grid-2x2": Grid2x2,
+  hammer: Hammer,
+  layers: Layers,
+  "paint-bucket": PaintBucket,
+  "paint-roller": PaintRoller,
+  paintbrush: Paintbrush,
+  ruler: Ruler,
+  "spray-can": SprayCan,
+  sun: Sun,
+  toilet: Toilet,
+  wrench: Wrench,
+  zap: Zap,
+  "shield-check": ShieldCheck,
+  clock: Clock3,
+  sparkles: Sparkles,
+  "circle-check": CircleCheck,
+  "badge-check": BadgeCheck,
+  "calendar-check": CalendarCheck,
+  camera: Camera,
+  phone: Phone,
+  house: House,
+  lightbulb: Lightbulb,
+  info: Info,
+  "map-pin": MapPin,
+} as const;
+
+export type ServiceIconName = keyof typeof ICONS;
+
+const { name = "wrench", class: className, strokeWidth = 1.75 } = Astro.props;
+const Icon = ICONS[name as ServiceIconName] ?? Wrench;
+---
+
+<Icon class={className} stroke-width={strokeWidth} aria-hidden="true" />

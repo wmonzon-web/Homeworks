@@ -1,0 +1,139 @@
+---
+/**
+ * The short hand-off form. Plain HTML GET: no JS, works before hydration,
+ * and lands on /get-quote with the service, zip, and phone pre-filled.
+ * The wizard owns validation; this form only enforces the cheap browser checks.
+ */
+import { ChevronDown } from "@lucide/astro";
+import { getServicesByCategory } from "@/lib/data/services/catalog";
+
+interface Props {
+  /** Visual treatment for the surface it sits on. */
+  tone?: "card" | "bar" | "inline";
+  /** Prototype-only: render the error state to judge it at full size. */
+  showErrors?: boolean;
+  /** Prefill (from query params on retry). */
+  values?: { service?: string; zip?: string; phone?: string };
+  class?: string;
+  /** Unique suffix so several forms on one page keep distinct ids. */
+  idSuffix?: string;
+}
+
+const {
+  tone = "card",
+  showErrors = false,
+  values = {},
+  class: className,
+  idSuffix = "",
+} = Astro.props;
+
+const groups = getServicesByCategory();
+const id = (base: string) => `${base}${idSuffix ? `-${idSuffix}` : ""}`;
+
+const fieldBase =
+  "h-12 w-full rounded-lg border border-input bg-white px-3.5 text-base text-ink placeholder:text-body/60 transition-[border-color,box-shadow] duration-150 focus-visible:border-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ink/15 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/15";
+const labelBase = "text-sm font-medium text-ink";
+const isBar = tone === "bar";
+---
+
+<form
+  method="get"
+  action="/get-quote"
+  class:list={[
+    isBar
+      ? "grid gap-3 md:grid-cols-[1.4fr_0.7fr_1fr_auto] md:items-end"
+      : "flex flex-col gap-4",
+    className,
+  ]}
+  aria-label="Start a quote request"
+>
+  <div class="flex flex-col gap-1.5">
+    <label for={id("hero-service")} class={labelBase}>What do you need help with?</label>
+    <div class="relative">
+      <select
+        id={id("hero-service")}
+        name="service"
+        class:list={[fieldBase, "appearance-none pr-10"]}
+        required
+        aria-invalid={showErrors ? "true" : undefined}
+        aria-describedby={showErrors ? id("hero-service-error") : undefined}
+      >
+        <option value="" selected={!values.service}>Choose a service</option>
+        {groups.map((group) => (
+          <optgroup label={group.label}>
+            {group.services.map((s) => (
+              <option value={s.slug} selected={values.service === s.slug}>{s.name}</option>
+            ))}
+          </optgroup>
+        ))}
+        <option value="other" selected={values.service === "other"}>Something else</option>
+      </select>
+      <ChevronDown
+        class="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-body"
+        aria-hidden="true"
+      />
+    </div>
+    {showErrors && (
+      <p id={id("hero-service-error")} class="flex items-center gap-1.5 text-sm text-destructive">
+        <span aria-hidden="true">•</span> Choose the service closest to your job.
+      </p>
+    )}
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for={id("hero-zip")} class={labelBase}>ZIP code</label>
+    <input
+      id={id("hero-zip")}
+      name="zip"
+      type="text"
+      inputmode="numeric"
+      autocomplete="postal-code"
+      pattern="[0-9]{5}"
+      maxlength="5"
+      placeholder="89135"
+      value={values.zip ?? ""}
+      class={fieldBase}
+      required
+      aria-invalid={showErrors ? "true" : undefined}
+      aria-describedby={showErrors ? id("hero-zip-error") : undefined}
+    />
+    {showErrors && (
+      <p id={id("hero-zip-error")} class="flex items-center gap-1.5 text-sm text-destructive">
+        <span aria-hidden="true">•</span> Enter the 5-digit ZIP of the home.
+      </p>
+    )}
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for={id("hero-phone")} class={labelBase}>Phone</label>
+    <input
+      id={id("hero-phone")}
+      name="phone"
+      type="tel"
+      autocomplete="tel"
+      placeholder="(702) 555-0100"
+      value={values.phone ?? ""}
+      class={fieldBase}
+      required
+      aria-invalid={showErrors ? "true" : undefined}
+      aria-describedby={showErrors ? id("hero-phone-error") : undefined}
+    />
+    {showErrors && (
+      <p id={id("hero-phone-error")} class="flex items-center gap-1.5 text-sm text-destructive">
+        <span aria-hidden="true">•</span> We'll text you a confirmation, so it must be a mobile number.
+      </p>
+    )}
+  </div>
+
+  <div class:list={["flex flex-col gap-2", isBar ? "" : "mt-1"]}>
+    <button
+      type="submit"
+      class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] md:w-auto"
+    >
+      Get my quote
+    </button>
+    {!isBar && (
+      <p class="text-sm text-body">Takes about a minute. No obligation, no spam.</p>
+    )}
+  </div>
+</form>

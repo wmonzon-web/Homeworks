@@ -61,6 +61,10 @@
 
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --shadow-raised: var(--elevation-raised);
+  --shadow-raised-hover: var(--elevation-raised-hover);
+  --shadow-floating: var(--elevation-floating);
 }
 
 :root {
@@ -98,6 +102,24 @@
   --chart-4: var(--cream-deep);
   --chart-5: var(--cream);
   --radius: 0.75rem;
+
+  /* Layered translucent shadows read as physical; a solid border reads pasted on. */
+  --elevation-raised:
+    0 0 0 1px oklch(0.17 0.012 255 / 0.06),
+    0 1px 2px oklch(0.17 0.012 255 / 0.06),
+    0 6px 16px -8px oklch(0.17 0.012 255 / 0.12);
+  --elevation-raised-hover:
+    0 0 0 1px oklch(0.17 0.012 255 / 0.08),
+    0 1px 3px oklch(0.17 0.012 255 / 0.08),
+    0 10px 24px -10px oklch(0.17 0.012 255 / 0.18);
+  --elevation-floating:
+    0 0 0 1px oklch(0.17 0.012 255 / 0.06),
+    0 2px 4px oklch(0.17 0.012 255 / 0.06),
+    0 24px 48px -16px oklch(0.17 0.012 255 / 0.28);
+  --border-hairline: 1px;
+  @media (min-resolution: 2dppx) {
+    --border-hairline: 0.5px;
+  }
   --sidebar: var(--cream);
   --sidebar-foreground: var(--ink);
   --sidebar-primary: var(--ink);
@@ -129,6 +151,9 @@
   --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 16%);
   --ring: oklch(1 0 0);
+  --elevation-raised: 0 0 0 1px oklch(1 0 0 / 0.09);
+  --elevation-raised-hover: 0 0 0 1px oklch(1 0 0 / 0.14);
+  --elevation-floating: 0 0 0 1px oklch(1 0 0 / 0.12);
 }
 
 @layer base {
@@ -153,6 +178,23 @@
   }
   p {
     text-wrap: pretty;
+  }
+  img, video {
+    outline: 1px solid rgb(0 0 0 / 0.1);
+    outline-offset: -1px;
+  }
+  .dark img, .dark video {
+    outline-color: rgb(255 255 255 / 0.1);
+  }
+  input, select, textarea {
+    font-size: 16px;
+  }
+  button, a, input, select, textarea, label {
+    touch-action: manipulation;
+  }
+  /* Anchor targets clear the fixed header. */
+  [id] {
+    scroll-margin-top: 6rem;
   }
   @media (prefers-reduced-motion: reduce) {
     html {

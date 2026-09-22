@@ -1,0 +1,61 @@
+---
+/** Variant 3 — Services First. Axis: the service tiles are the hero; form docked at the side. */
+import { ArrowRight } from "@lucide/astro";
+import HeroLeadForm from "@/components/home/HeroLeadForm.astro";
+import ServiceIcon from "@/components/ServiceIcon.astro";
+import { getFeaturedServices, SERVICE_CATALOG } from "@/lib/data/services/catalog";
+
+interface Props { showErrors?: boolean }
+const { showErrors = false } = Astro.props;
+const featured = getFeaturedServices(8);
+---
+
+<section class="bg-white" aria-labelledby="hero-heading-services">
+  <div class="container mx-auto px-4 pt-28 pb-16 md:pt-40 md:pb-24">
+    <div class="grid gap-10 lg:grid-cols-[1fr_24rem] lg:gap-14">
+      <div class="max-w-2xl">
+        <p class="eyebrow">Las Vegas home services</p>
+        <h1 id="hero-heading-services" class="mt-4 text-5xl leading-[0.95] tracking-wide text-ink md:text-6xl">
+          What needs fixing?
+        </h1>
+        <p class="mt-5 max-w-[50ch] text-lg leading-relaxed text-body md:text-xl">
+          Pick the job and we'll quote it. One licensed crew handles all of it,
+          from a single leaky faucet to a full bathroom refresh.
+        </p>
+      </div>
+
+      <aside class="lg:row-span-2 lg:self-start lg:sticky lg:top-28">
+        <div class="rounded-2xl bg-cream p-6 md:p-7">
+          <h2 class="font-heading text-2xl font-bold uppercase tracking-wide text-ink">Start your quote</h2>
+          <p class="mt-1 text-[0.95rem] text-body">About a minute. We reply within one business day.</p>
+          <div class="mt-5">
+            <HeroLeadForm tone="card" showErrors={showErrors} idSuffix="services" />
+          </div>
+        </div>
+      </aside>
+
+      <div>
+        <ul class="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Popular services">
+          {featured.map((s) => (
+            <li>
+              <a
+                href={`/get-quote?service=${s.slug}`}
+                class="group flex h-full flex-col gap-3 rounded-xl bg-white p-4 shadow-raised transition-[box-shadow,transform] duration-150 ease-out hover:shadow-raised-hover focus-visible:ring-3 focus-visible:ring-ink/20 focus-visible:outline-none active:scale-[0.96]"
+              >
+                <span class="inline-flex size-10 items-center justify-center rounded-full bg-cream text-ink">
+                  <ServiceIcon name={s.icon} class="size-5" />
+                </span>
+                <span class="font-heading text-lg leading-tight font-bold uppercase tracking-wide text-ink">{s.shortName}</span>
+                <span class="line-clamp-2 text-sm leading-snug text-body">{s.summary}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <a href="/services" class="mt-5 inline-flex items-center gap-1.5 text-[0.95rem] font-medium text-ink underline decoration-ink/25 underline-offset-4 transition-colors hover:decoration-brand-red">
+          See all {SERVICE_CATALOG.length} services
+          <ArrowRight class="size-4" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

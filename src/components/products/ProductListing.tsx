@@ -47,16 +47,22 @@ function Filters({ groups, active, onToggle, onClear }: { groups: FilterGroup[];
 
 export default function ProductListing({ products }: Props) {
   const groups = useMemo(() => buildFilterGroups(products), [products]);
-  // Initial state comes from the URL so a shared link renders filtered on first paint after hydration.
-  const [active, setActive] = useState<ActiveFilters>(() =>
-    typeof window === "undefined" ? {} : parseFilters(window.location.search, groups),
-  );
+  // The page is static, so the first client render must match the unfiltered
+  // HTML; URL filters are applied right after mount, then kept in sync.
+  const [active, setActive] = useState<ActiveFilters>({});
+  const [hydrated, setHydrated] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    setActive(parseFilters(window.location.search, groups));
+    setHydrated(true);
+  }, [groups]);
+
+  useEffect(() => {
+    if (!hydrated) return;
     const url = `${window.location.pathname}${serializeFilters(active)}`;
     if (url !== `${window.location.pathname}${window.location.search}`) history.replaceState(null, "", url);
-  }, [active]);
+  }, [active, hydrated]);
 
   const toggle = (key: string, value: string) =>
     setActive((prev) => {

@@ -173,6 +173,8 @@ npx wrangler d1 execute homeworks-leads --local --command "SELECT id, type, name
 
 ## Deployment
 
+The shared deployment account is `5963aa5b3d6e276554fb7a543cc3acf2`. Keep `wrangler.jsonc` pointed at this account when collaborating; the account must match the Worker connected to GitHub in Cloudflare Workers Builds.
+
 One-time setup (needs the Cloudflare account and the `homeworksnv.com` zone):
 
 1. `npx wrangler login`

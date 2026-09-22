@@ -2,7 +2,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "homeworks",
   "main": "@astrojs/cloudflare/entrypoints/server",
-  "account_id": "6449705a5765217aefd697f7c95909c4",
+  "account_id": "5963aa5b3d6e276554fb7a543cc3acf2",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat"],
   "observability": { "enabled": true },

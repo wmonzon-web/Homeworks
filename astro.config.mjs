@@ -8,6 +8,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   site: "https://homeworksnv.com",
   trailingSlash: "never",
+  session: false,
   build: { format: "file" },
   integrations: [
     react(),

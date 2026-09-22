@@ -29,7 +29,7 @@ Placeholders that must be replaced before launch:
 - All product data and images (`src/lib/data/products/*`, `public/images/products/*`)
 - Every photo: the hero, service heroes, content sections, and process steps render labeled placeholder frames (`ImageSlot`) until real images are supplied
 - The "Licensed & insured" and "Same-week scheduling" claims in the hero and services copy must be confirmed true
-- `wrangler.jsonc` `database_id`, `LEAD_TO`, and `allowed_destination_addresses`
+- Confirm `LEAD_TO` and `allowed_destination_addresses` in `wrangler.jsonc`; provision the named D1/R2 resources and apply the D1 schema in the deployment account
 
 Not built: portfolio, pricing/membership pages, Turnstile, webhook delivery to a CRM.
 
@@ -102,7 +102,7 @@ Not built: portfolio, pricing/membership pages, Turnstile, webhook delivery to a
 
 - Steps: Service(s) → Timing → Your home → Photos → Budget → Contact
 - Prefills from `?service`, `?zip`, `?phone`, `?product`; skips to step 2 when a service is given
-- Draft persists in `sessionStorage` (`hw-quote-draft`), not photos
+- Draft persists in browser `sessionStorage` (`hw-quote-draft`), not photos. Astro server sessions are disabled (`session: false`); do not add a `SESSION` KV binding
 - Submits `FormData` to `/api/quote`; on success redirects to `/thank-you?type=quote`
 
 ### Lead API
@@ -173,17 +173,18 @@ npx wrangler d1 execute homeworks-leads --local --command "SELECT id, type, name
 
 ## Deployment
 
-The shared deployment account is `5963aa5b3d6e276554fb7a543cc3acf2`. Keep `wrangler.jsonc` pointed at this account when collaborating; the account must match the Worker connected to GitHub in Cloudflare Workers Builds.
+Deployment is triggered by GitHub pushes through Cloudflare Workers Builds. Keep account IDs and D1 database IDs out of the repository: the build credentials select the account, and Wrangler resolves the D1 database by `database_name`. Keep the portable Worker settings and API bindings in `wrangler.jsonc`. Workers Builds uses Wrangler internally even though contributors do not deploy locally.
 
-One-time setup (needs the Cloudflare account and the `homeworksnv.com` zone):
+Dashboard setup in the hosting account (needs access to the `homeworksnv.com` zone):
 
-1. `npx wrangler login`
-2. `npx wrangler d1 create homeworks-leads` → paste the id into `wrangler.jsonc`
-3. `npx wrangler r2 bucket create homeworks-uploads`
-4. Dashboard → Email → Email Sending: add `homeworksnv.com`, verify the destination inbox; set `LEAD_TO` and `allowed_destination_addresses`
-5. `npx wrangler secret put PHOTO_LINK_SECRET`
-6. `npm run typegen && npm run db:migrate:remote`
-7. `npm run deploy`; attach the custom domain under Workers → Domains (or add `routes` with `custom_domain: true` to `wrangler.jsonc`)
+1. Connect the GitHub repository to the `homeworks` Worker. Set production branch `main`, root directory to the repository root, build command `npm run build`, and deploy command `npx wrangler deploy`.
+2. Under Storage & databases, create or reuse D1 database `homeworks-leads` and R2 bucket `homeworks-uploads`. The checked-in bindings are `DB` and `UPLOADS`; no resource IDs need to be committed. Wrangler can provision missing named resources, but the D1 schema still needs applying.
+3. In the D1 database console, run the SQL from `migrations/0001_leads.sql` once. Apply future migrations in order. The local `npm run db:migrate:local` command affects only the local database.
+4. Dashboard → Email → Email Sending: configure `homeworksnv.com` and verify the destination inbox. Confirm `LEAD_FROM`, `LEAD_TO`, and `allowed_destination_addresses` in `wrangler.jsonc` match that setup.
+5. In the Worker's Variables and Secrets, add `PHOTO_LINK_SECRET` as a secret. Configure the custom domain under Workers → Domains.
+6. Push to `main` or retry the latest build. No `SESSION` KV binding is needed: `session: false` disables the adapter's automatic session namespace provisioning. Existing KV data must not be deleted as part of deployment troubleshooting.
+
+Local Wrangler deployment remains available as an optional workflow via `npm run deploy`; it is not required for collaborators using GitHub builds.
 
 Verify after deploy: `curl -I https://homeworksnv.com`, `/sitemap-index.xml`, `/llms.txt`, submit a real quote and confirm the email and photo links, `npx wrangler tail`.
 

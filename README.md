@@ -67,6 +67,23 @@ npm run build
 
 These commands check Astro/TypeScript and create a production build without deploying it.
 
+## Deploy from GitHub through Cloudflare
+
+Connect this repository to a **Cloudflare Worker** in the account that will host the site. In the Worker's build settings, use:
+
+- Production branch: `main`
+- Root directory: the repository root
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+
+Cloudflare runs the deploy command on its build server; contributors do not need to log into Cloudflare or deploy from their computers. Workers Builds still uses Wrangler internally, even when deployment starts from a GitHub push.
+
+The repository intentionally has no Cloudflare account ID or D1 database ID. The build's credentials choose the account, and the database is resolved by its name (`homeworks-leads`). `wrangler.jsonc` retains the portable runtime settings and bindings required by the quote/contact APIs. Removing those bindings would break lead storage, uploads, or email delivery.
+
+Astro server sessions are disabled because the site does not use them. Quote drafts use browser `sessionStorage`, so no `SESSION` KV namespace is needed or created by the adapter.
+
+Before testing live forms, follow the [resource and email setup in AGENTS.md](./AGENTS.md#deployment). A successful site deployment alone does not create the lead tables or verify email sending.
+
 ## Scripts
 
 | Command | What it does |

@@ -1,20 +1,27 @@
 import { BUSINESS } from "@/lib/business";
 import { leadHtml, leadSubject, leadText } from "@/lib/leads/email";
 import { recordEmailStatus } from "@/lib/leads/db";
+import { buildMime } from "@/lib/leads/mime";
 import { signPhotoKey } from "@/lib/leads/storage";
 import type { DeliveryResult, Lead } from "@/lib/leads/types";
 
-/** Cloudflare Email Service's object-form send; typed loosely so older type packages don't block the build. */
-type EmailSender = {
-  send(message: {
-    from: { name?: string; addr: string } | string;
-    to: string | string[];
-    replyTo?: string;
-    subject: string;
-    html?: string;
-    text?: string;
-  }): Promise<unknown>;
-};
+/**
+ * The send_email binding. Newer runtimes accept a plain message object; the
+ * documented API takes an EmailMessage(from, to, rawMime). We try the object
+ * form first and fall back to a hand-built MIME message.
+ */
+type EmailSender = { send(message: unknown): Promise<unknown> };
+
+async function sendWithFallback(sender: EmailSender, msg: { from: string; fromName: string; to: string; replyTo?: string; subject: string; html: string; text: string }) {
+  try {
+    await sender.send({ from: { name: msg.fromName, addr: msg.from }, to: msg.to, replyTo: msg.replyTo, subject: msg.subject, html: msg.html, text: msg.text });
+    return;
+  } catch (error) {
+    if (!(error instanceof TypeError)) throw error;
+  }
+  const { EmailMessage } = (await import("cloudflare:email")) as { EmailMessage: new (from: string, to: string, raw: string) => unknown };
+  await sender.send(new EmailMessage(msg.from, msg.to, buildMime(msg)));
+}
 
 export interface LeadEnv {
   DB: D1Database;
@@ -38,8 +45,9 @@ async function emailDeliverer(env: LeadEnv, lead: Lead): Promise<DeliveryResult>
     return { channel: "email", ok: false, error: "not-configured" };
   }
   const links = await photoLinks(env, lead);
-  await sender.send({
-    from: { name: `${BUSINESS.name} website`, addr: env.LEAD_FROM },
+  await sendWithFallback(sender, {
+    from: env.LEAD_FROM,
+    fromName: `${BUSINESS.name} website`,
     to: env.LEAD_TO,
     replyTo: lead.email,
     subject: leadSubject(lead),
@@ -55,13 +63,14 @@ async function emailDeliverer(env: LeadEnv, lead: Lead): Promise<DeliveryResult>
  */
 export async function deliverLead(env: LeadEnv, lead: Lead): Promise<DeliveryResult[]> {
   const results: DeliveryResult[] = [];
-  for (const deliver of [emailDeliverer]) {
+  const deliverers: Array<[string, (env: LeadEnv, lead: Lead) => Promise<DeliveryResult>]> = [["email", emailDeliverer]];
+  for (const [channel, deliver] of deliverers) {
     try {
       results.push(await deliver(env, lead));
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      console.error("[lead-deliver]", message);
-      results.push({ channel: deliver.name, ok: false, error: message });
+      console.error(`[lead-deliver:${channel}]`, message);
+      results.push({ channel, ok: false, error: message });
     }
   }
   const email = results.find((r) => r.channel === "email");

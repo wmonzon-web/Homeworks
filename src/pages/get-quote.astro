@@ -1,0 +1,30 @@
+---
+import Base from "@/layouts/Base.astro";
+import QuoteWizard from "@/components/quote/QuoteWizard.tsx";
+import { BUSINESS } from "@/lib/business";
+---
+
+<Base
+  title="Get a quote"
+  description={`Request a flat-price quote from ${BUSINESS.name} for repairs, painting, flooring, plumbing, electrical, or a remodel in Las Vegas. Takes about a minute.`}
+>
+  <section class="section pt-6 md:pt-10">
+    <div class="container mx-auto px-4">
+      <div class="mx-auto max-w-2xl">
+        <p class="eyebrow">Get a quote</p>
+        <h1 class="mt-3 text-4xl leading-[0.98] md:text-5xl">Tell us about your project</h1>
+        <p class="mt-3 max-w-[58ch] text-body">
+          No account or obligation. Share what needs doing and how to reach you so we can follow up about a quote.
+        </p>
+      </div>
+      <div class="mt-10">
+        <QuoteWizard client:load />
+        <noscript>
+          <div class="mx-auto max-w-2xl rounded-xl bg-cream p-6">
+            <p class="text-body">The quote form needs JavaScript. Call us at <a href={`tel:${BUSINESS.phone.e164}`} class="font-medium text-ink underline">{BUSINESS.phone.display}</a> or email <a href={`mailto:${BUSINESS.email}`} class="font-medium text-ink underline">{BUSINESS.email}</a>.</p>
+          </div>
+        </noscript>
+      </div>
+    </div>
+  </section>
+</Base>

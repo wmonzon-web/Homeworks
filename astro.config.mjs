@@ -12,7 +12,7 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => !/\/proto(\/|$)/.test(page),
+      filter: (page) => !/\/(proto|thank-you)(\/|$)/.test(page),
     }),
   ],
   vite: {

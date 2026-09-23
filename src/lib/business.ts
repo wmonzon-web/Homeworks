@@ -13,7 +13,7 @@ export const BUSINESS = {
     display: "(702) 555-0100", // PLACEHOLDER
     e164: "+17025550100", // PLACEHOLDER
   },
-  email: "leads@homeworksnv.com", // PLACEHOLDER
+  email: "leads@homeworksnv.com",
   /** Service-area business: no public street address. */
   address: {
     street: "",

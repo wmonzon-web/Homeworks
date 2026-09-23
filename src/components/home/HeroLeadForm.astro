@@ -1,0 +1,168 @@
+---
+/**
+ * The short hand-off form. GET carries services, zip, and phone; a small script
+ * saves the street address in session storage so it stays out of the URL.
+ * The wizard owns validation; this form only enforces the cheap browser checks.
+ */
+import { getServicesByCategory } from "@/lib/data/services/catalog";
+
+interface Props {
+  /** Visual treatment for the surface it sits on. */
+  tone?: "card" | "bar" | "inline";
+  /** Prototype-only: render the error state to judge it at full size. */
+  showErrors?: boolean;
+  /** Prefill (from query params on retry). */
+  values?: { service?: string | string[]; address?: string; zip?: string; phone?: string };
+  class?: string;
+  /** Unique suffix so several forms on one page keep distinct ids. */
+  idSuffix?: string;
+}
+
+const {
+  tone = "card",
+  showErrors = false,
+  values = {},
+  class: className,
+  idSuffix = "",
+} = Astro.props;
+
+const groups = getServicesByCategory();
+const selectedServices = Array.isArray(values.service) ? values.service : values.service ? [values.service] : [];
+const id = (base: string) => `${base}${idSuffix ? `-${idSuffix}` : ""}`;
+
+const fieldBase =
+  "h-12 w-full rounded-lg border border-input bg-white px-3.5 text-base text-ink placeholder:text-body/60 transition-[border-color,box-shadow] duration-150 focus-visible:border-ink focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ink/15 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/15";
+const labelBase = "text-sm font-medium text-ink";
+const isBar = tone === "bar";
+---
+
+<form
+  method="get"
+  action="/get-quote"
+  data-hero-quote
+  class:list={[
+    isBar
+      ? "grid gap-3 md:grid-cols-2 xl:grid-cols-[1.4fr_1.4fr_0.7fr_1fr_auto] xl:items-end"
+      : "flex flex-col gap-4",
+    className,
+  ]}
+  aria-label="Start a quote request"
+>
+  <div class="flex flex-col gap-1.5">
+    <span id={id("hero-service-label")} class={labelBase}>What do you need help with?</span>
+    <details class="group relative">
+      <summary class:list={[fieldBase, "flex cursor-pointer list-none items-center justify-between gap-2 marker:hidden"]} aria-labelledby={id("hero-service-label")}>
+        <span>Choose services (select all that apply)</span>
+        <span aria-hidden="true">⌄</span>
+      </summary>
+      <div class="absolute z-20 mt-1 max-h-72 w-full overflow-y-auto rounded-lg border border-input bg-white p-3 shadow-raised">
+        {groups.map((group) => (
+          <fieldset class="mb-3 last:mb-0">
+            <legend class="mb-1 font-heading text-sm font-bold uppercase tracking-wide text-ink">{group.label}</legend>
+            {group.services.map((s) => (
+              <label for={id(`hero-service-${s.slug}`)} class="flex cursor-pointer items-start gap-2 rounded-md px-1 py-1.5 text-sm text-ink hover:bg-cream">
+                <input id={id(`hero-service-${s.slug}`)} type="checkbox" name="service" value={s.slug} checked={selectedServices.includes(s.slug)} class="mt-0.5 size-4 accent-ink" />
+                <span>{s.name}</span>
+              </label>
+            ))}
+          </fieldset>
+        ))}
+        <label for={id("hero-service-other")} class="flex cursor-pointer items-start gap-2 rounded-md px-1 py-1.5 text-sm text-ink hover:bg-cream">
+          <input id={id("hero-service-other")} type="checkbox" name="service" value="other" checked={selectedServices.includes("other")} class="mt-0.5 size-4 accent-ink" />
+          <span>Something else</span>
+        </label>
+      </div>
+    </details>
+    {showErrors && (
+      <p id={id("hero-service-error")} class="flex items-center gap-1.5 text-sm text-destructive">
+        <span aria-hidden="true">•</span> Choose at least one service.
+      </p>
+    )}
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for={id("hero-address")} class={labelBase}>Property address</label>
+    <input
+      id={id("hero-address")}
+      data-quote-address
+      type="text"
+      autocomplete="street-address"
+      maxlength="200"
+      placeholder="Street address"
+      value={values.address ?? ""}
+      class={fieldBase}
+      required
+      aria-invalid={showErrors ? "true" : undefined}
+      aria-describedby={showErrors ? id("hero-address-error") : undefined}
+    />
+    {showErrors && <p id={id("hero-address-error")} class="text-sm text-destructive">Enter the property address.</p>}
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for={id("hero-zip")} class={labelBase}>ZIP code</label>
+    <input
+      id={id("hero-zip")}
+      name="zip"
+      type="text"
+      inputmode="numeric"
+      autocomplete="postal-code"
+      pattern="[0-9]{5}"
+      maxlength="5"
+      placeholder="89135"
+      value={values.zip ?? ""}
+      class={fieldBase}
+      required
+      aria-invalid={showErrors ? "true" : undefined}
+      aria-describedby={showErrors ? id("hero-zip-error") : undefined}
+    />
+    {showErrors && (
+      <p id={id("hero-zip-error")} class="flex items-center gap-1.5 text-sm text-destructive">
+        <span aria-hidden="true">•</span> Enter the 5-digit ZIP of the home.
+      </p>
+    )}
+  </div>
+
+  <div class="flex flex-col gap-1.5">
+    <label for={id("hero-phone")} class={labelBase}>Phone</label>
+    <input
+      id={id("hero-phone")}
+      name="phone"
+      type="tel"
+      autocomplete="tel"
+      placeholder="(702) 555-0100"
+      value={values.phone ?? ""}
+      class={fieldBase}
+      required
+      aria-invalid={showErrors ? "true" : undefined}
+      aria-describedby={showErrors ? id("hero-phone-error") : undefined}
+    />
+    {showErrors && (
+      <p id={id("hero-phone-error")} class="flex items-center gap-1.5 text-sm text-destructive">
+        <span aria-hidden="true">•</span> Enter a phone number where we can reach you.
+      </p>
+    )}
+  </div>
+
+  <div class:list={["flex flex-col gap-2", isBar ? "" : "mt-1"]}>
+    <button
+      type="submit"
+      class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96] md:w-auto"
+    >
+      Get my quote
+    </button>
+  </div>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>("form[data-hero-quote]").forEach((form) => {
+    form.addEventListener("submit", () => {
+      const input = form.querySelector<HTMLInputElement>("[data-quote-address]");
+      if (!input) return;
+      try {
+        sessionStorage.setItem("hw-quote-address", input.value.trim());
+      } catch {
+        // The wizard asks for the address again if storage is unavailable.
+      }
+    });
+  });
+</script>

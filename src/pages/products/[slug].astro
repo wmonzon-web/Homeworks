@@ -87,7 +87,7 @@ const schema = {
           </dl>
 
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="/contact" class="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]">
+            <a href={`/get-quote?${new URLSearchParams({ ...(installer ? { service: installer.slug } : {}), product: product.slug })}`} class="inline-flex h-12 items-center justify-center rounded-lg bg-ink px-6 font-heading text-base font-bold uppercase tracking-wide text-white transition-[background-color,transform] duration-150 ease-out hover:bg-ink-soft focus-visible:ring-3 focus-visible:ring-ink/30 focus-visible:ring-offset-2 focus-visible:outline-none active:scale-[0.96]">
               Quote this installed
             </a>
             {installer && (

@@ -8,7 +8,7 @@ This is the canonical project context file. Update it when architecture, functio
 - It is a child company of Xtreme Build Group. Only general colors and typography direction are shared; never reuse its copy, photos, or contact details.
 - Astro 7 prerenders the website. Cloudflare Workers serves static assets and handles `POST /api/quote` from `src/worker.ts`.
 - Production deploys through Cloudflare Workers Builds from `main` using `npm run build` and `npx wrangler deploy --config wrangler.jsonc`.
-- The Worker serves `homeworksnv.com`; `www.homeworksnv.com` redirects to the root hostname. Both custom domains are declared in `wrangler.jsonc`.
+- The Worker serves `homeworksnv.com` and `www.homeworksnv.com`. Both custom domains are declared in `wrangler.jsonc`; canonical SEO URLs use the root hostname.
 - Design decisions are in `docs/decisions/`.
 
 ## Current functionality

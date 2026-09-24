@@ -181,12 +181,7 @@ async function quoteResponse(request: Request, env: WorkerEnv): Promise<Response
 
 export default {
   async fetch(request: Request, env: WorkerEnv): Promise<Response> {
-    const url = new URL(request.url);
-    if (url.hostname === "www.homeworksnv.com") {
-      url.hostname = "homeworksnv.com";
-      return Response.redirect(url.toString(), 308);
-    }
-    const path = url.pathname;
+    const path = new URL(request.url).pathname;
     if (path === "/api/quote") return quoteResponse(request, env);
     if (path.startsWith("/api/")) return json({ message: "Not found." }, 404);
     return env.ASSETS.fetch(request);

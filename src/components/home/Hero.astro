@@ -37,15 +37,15 @@ const trust = ["Licensed & insured", "Same-week scheduling"];
     ) : (
       <div class="h-full w-full bg-[oklch(0.3_0.01_255)]" style="background-image: linear-gradient(135deg, oklch(0.34 0.01 255) 0 1px, transparent 1px 28px)"></div>
     )}
-    <div class="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.17_0.012_255/0.85)_0%,oklch(0.17_0.012_255/0.65)_50%,oklch(0.17_0.012_255/0.45)_100%)]"></div>
+    <div class="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.17_0.012_255/0.45)_0%,oklch(0.17_0.012_255/0.65)_50%,oklch(0.17_0.012_255/0.85)_100%)]"></div>
     {!image && (
       <span class="absolute right-4 bottom-4 inline-flex items-center gap-2 rounded-md bg-white/10 px-2.5 py-1.5 text-xs text-white/70">Photo: crew finishing a wall in a Las Vegas living room, wide, natural light</span>
     )}
   </div>
 
   <div class="container mx-auto px-4 pt-28 pb-16 md:pt-40 md:pb-24">
-    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-      <div class="max-w-2xl">
+    <div class="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:gap-16">
+      <div class="max-w-2xl lg:order-2">
         <p class="eyebrow" data-intro>Las Vegas home services</p>
         <h1 id="hero-heading" data-intro class="mt-4 text-5xl leading-[0.95] tracking-wide text-white md:text-6xl xl:text-7xl">
           Repairs &amp; renovations for the house you're keeping.
@@ -62,7 +62,7 @@ const trust = ["Licensed & insured", "Same-week scheduling"];
         </p>
       </div>
 
-      <div class="light rounded-2xl bg-white p-6 text-ink shadow-floating md:p-8" data-intro-card>
+      <div class="light rounded-2xl bg-white p-6 text-ink shadow-floating md:p-8 lg:order-1" data-intro-card>
         <h2 class="font-heading text-2xl font-bold uppercase tracking-wide text-ink">Get a free quote</h2>
         <p class="mt-1 text-[0.95rem] text-body">Tell us about the work you need done.</p>
         <div class="mt-6"><HeroLeadForm idSuffix="hero" /></div>

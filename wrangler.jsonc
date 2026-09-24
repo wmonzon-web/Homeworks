@@ -3,6 +3,10 @@
   "name": "homeworks",
   "main": "src/worker.ts",
   "compatibility_date": "2026-09-01",
+  "routes": [
+    { "pattern": "homeworksnv.com", "custom_domain": true },
+    { "pattern": "www.homeworksnv.com", "custom_domain": true }
+  ],
   "observability": { "enabled": true },
   "assets": {
     "directory": "./dist",

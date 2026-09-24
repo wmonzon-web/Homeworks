@@ -13,6 +13,7 @@
     "astro": "astro",
     "deploy": "test ! -d src/pages/proto && npm run build && wrangler deploy --config wrangler.jsonc",
     "og": "node scripts/generate-og.mjs",
+    "logo": "node scripts/generate-logo.mjs",
     "products:placeholders": "node scripts/generate-placeholder-products.mjs",
     "prebuild": "node scripts/clean-deploy-config.mjs"
   },

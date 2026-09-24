@@ -5,25 +5,19 @@
 import satori from "satori";
 import sharp from "sharp";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
-const root = new URL("..", import.meta.url).pathname;
+const root = fileURLToPath(new URL("..", import.meta.url));
 const saira = readFileSync(`${root}node_modules/@fontsource/saira-condensed/files/saira-condensed-latin-700-normal.woff`);
+const logo = readFileSync(`${root}public/brand/wordmark-light.svg`);
+const logoData = `data:image/svg+xml;base64,${logo.toString("base64")}`;
 
 const INK = "#0C1015", RED = "#E82820", CREAM = "#FBF3EA";
 const h = (type, props, ...children) => ({ type, props: { ...props, children: children.length === 1 ? children[0] : children } });
 
 const svg = await satori(
   h("div", { style: { width: 1200, height: 630, display: "flex", flexDirection: "column", justifyContent: "space-between", background: INK, color: "#fff", padding: 72, fontFamily: "Saira Condensed" } },
-    h("div", { style: { display: "flex", alignItems: "center", gap: 18 } },
-      h("div", { style: { width: 56, height: 56, borderRadius: 12, background: RED, display: "flex", alignItems: "center", justifyContent: "center" } },
-        h("svg", { width: 40, height: 40, viewBox: "0 0 32 32", fill: "none" },
-          h("path", { d: "M6.5 15.5 16 7l9.5 8.5", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round", strokeLinejoin: "round" }),
-          h("path", { d: "M10.5 15v11M21.5 15v11", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round" }),
-          h("path", { d: "M10.5 20.5h11", stroke: "#fff", strokeWidth: 3, strokeLinecap: "round" }),
-        ),
-      ),
-      h("div", { style: { fontSize: 44, letterSpacing: 4, textTransform: "uppercase" } }, "Homeworks"),
-    ),
+    h("img", { src: logoData, width: 340, height: 50 }),
     h("div", { style: { display: "flex", flexDirection: "column", gap: 20 } },
       h("div", { style: { fontSize: 22, letterSpacing: 5, textTransform: "uppercase", color: RED } }, "Las Vegas home services"),
       h("div", { style: { fontSize: 96, lineHeight: 0.95, textTransform: "uppercase", letterSpacing: 1, maxWidth: 1000 } }, "Repairs & renovations for the house you're keeping."),

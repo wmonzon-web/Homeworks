@@ -13,6 +13,7 @@ This is the canonical project context file. Update it when architecture, functio
 ## Current functionality
 
 - Homepage with short quote form, services, process, products, FAQ, and CTA.
+- Homepage hero uses an illustrative generated flooring installation photo at `public/images/hero/flooring-installation.png`; replace it with a real Homeworks project photo when available.
 - Twenty service pages and product browse pages. Product content and imagery remain placeholders.
 - The short form takes service selections, property address, ZIP, and phone to `/get-quote`. The address is passed through session storage so it is absent from the URL.
 - `/get-quote` is a five step React wizard: services, timing, home, budget, contact. It submits to `POST /api/quote` and redirects to `/thank-you` on success.
